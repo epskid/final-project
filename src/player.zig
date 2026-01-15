@@ -19,6 +19,7 @@ gun_cooldown: f32 = 0,
 grounded: bool,
 artifact: ?Artifact = null, // the artifact we're carrying
 exploding: ?usize = null,
+died: bool = false,
 
 pub fn init() Self {
     rl.stopMusicStream(assets.main_music);
@@ -32,9 +33,15 @@ pub fn init() Self {
 }
 
 pub fn tick(self: *Self, game: *Game) !void {
+    if (self.died) {
+        rl.stopMusicStream(assets.main_music);
+        rl.updateMusicStream(assets.main_music);
+        if (rl.getKeyPressed() != .null) self.respawn(game);
+        return;
+    }
     if (self.exploding) |*ex| {
         ex.* -= 1;
-        if (ex.* == 0) self.die(game);
+        if (ex.* == 0) self.die();
         return;
     }
 
@@ -63,7 +70,6 @@ pub fn tick(self: *Self, game: *Game) !void {
         self.velocity.x /= 1.1;
     }
 
-
     // jump if on ground
     if (self.grounded and rl.isKeyPressed(.space)) {
         self.velocity.y = -jump_strength;
@@ -81,7 +87,7 @@ pub fn tick(self: *Self, game: *Game) !void {
             std.mem.swap(?Artifact, &self.artifact, &game.map.artifact);
         }
     }
-    
+
     // put artifact in tractor beam
     if (game.map.tractor_beam) |*tb| {
         if (rl.isKeyPressed(.q) and rl.checkCollisionRecs(
@@ -103,17 +109,14 @@ pub fn tick(self: *Self, game: *Game) !void {
                 const x: isize = @intCast(xu);
                 const y: isize = @intCast(yu);
 
-                if (player_y + y < 0) continue
-                else if (player_x + x < 0) continue
-                else if (player_y + y > (consts.height - 1)) continue
-                else if (player_x + x > (consts.width - 1)) continue;
+                if (player_y + y < 0) continue else if (player_x + x < 0) continue else if (player_y + y > (consts.height - 1)) continue else if (player_x + x > (consts.width - 1)) continue;
 
                 const glsl = game.particles[(@as(usize, @intCast(player_x + x)) + consts.width * @as(usize, @intCast(player_y + y)))];
                 const particle = glsl.unpack();
                 switch (particle.type) {
                     .loose_sand => sand_count += 1,
                     .lava => lava_count += 1,
-                    else => {}
+                    else => {},
                 }
             }
         }
@@ -122,7 +125,7 @@ pub fn tick(self: *Self, game: *Game) !void {
             if (self.suffocation) |*suf| {
                 suf.* -= dt;
                 if (suf.* < 0) {
-                    self.die(game);
+                    self.die();
                     return;
                 }
             } else {
@@ -133,7 +136,7 @@ pub fn tick(self: *Self, game: *Game) !void {
             if (suf.* > suffocation_time) self.suffocation = null;
         }
         if (lava_count > 127) {
-            self.die(game);
+            self.die();
             return;
         }
     }
@@ -164,13 +167,9 @@ pub fn tick(self: *Self, game: *Game) !void {
 
     // keep player in-bounds if nothing lies of screen
     // or advance them if there is
-    if (!game.level.advance(game)) 
-    {
+    if (!game.level.advance(game)) {
         const old_pos = self.position;
-        self.position = self.position.clamp(
-            .init(-0.5 * consts.tile_size, -0.5 * consts.tile_size),
-            .init(consts.width - (consts.tile_size / 2), consts.height)
-        );
+        self.position = self.position.clamp(.init(-0.5 * consts.tile_size, -0.5 * consts.tile_size), .init(consts.width - (consts.tile_size / 2), consts.height));
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;
         }
@@ -178,7 +177,7 @@ pub fn tick(self: *Self, game: *Game) !void {
             self.velocity.y = 0;
 
             if (self.position.y == (consts.height)) {
-                self.die(game);
+                self.die();
                 return;
             }
         }
@@ -210,7 +209,11 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
 }
 
-pub fn die(self: *Self, game: *Game) void {
+pub fn die(self: *Self) void {
+    self.died = true;
+}
+
+pub fn respawn(self: *Self, game: *Game) void {
     game.level.switchRoom(0, game);
     self.* = .init();
     self.spawnAtTractor(game);
@@ -222,11 +225,32 @@ pub fn spawnAtTractor(self: *Self, game: *Game) void {
 }
 
 pub fn draw(self: *const Self) void {
+    if (self.died) {
+        const text = "YOU DIED -- PRESS ANY KEY TO CONTINUE";
+        const size = 16;
+        const width = rl.measureText(text, size);
+        const pad = 4;
+        rl.drawRectangle(
+            consts.width / 2 - @divFloor(width, 2) - pad,
+            consts.height / 2 - size / 2 - pad,
+            width + pad * 2,
+            size + pad * 2,
+            consts.palette.x3B2027,
+        );
+        rl.drawText(
+            text,
+            consts.width / 2 - @divFloor(width, 2),
+            consts.height / 2 - size / 2,
+            size,
+            consts.palette.xE64539,
+        );
+    }
+    if (self.exploding != null) return;
     if (self.artifact) |af| af.draw();
 
     // flip things around based on which way the gun is pointing
     const facing: f32 = if (self.gun_position.x < 0) -1 else 1;
-    const tint: rl.Color = if (self.suffocating) .init(0, 0, 0, 127) else .white;
+    const tint: rl.Color = if (self.suffocating or self.died) .init(0, 0, 0, 127) else .white;
 
     rl.drawTexturePro(
         assets.player,
@@ -250,8 +274,8 @@ pub fn draw(self: *const Self) void {
     const pos = self.position
         .addValue(consts.tile_size / 2)
         .add(self.gun_position
-            .scale(gun_distance)
-            .scale((gun_cooldown_max - self.gun_cooldown) / gun_cooldown_max)); // move gun while cooling down
+        .scale(gun_distance)
+        .scale((gun_cooldown_max - self.gun_cooldown) / gun_cooldown_max)); // move gun while cooling down
 
     rl.drawTexturePro(
         assets.gun,
