@@ -77,7 +77,10 @@ pub fn tick(self: *Self, game: *Game) !void {
                 map_y = if (y_rel < 0) @ceil(map_y) else @floor(map_y);
                 const idx = map_x + consts.width_tiles * map_y;
                 if (idx < game.map.tiles.len) {
-                    if (game.map.tiles[@intFromFloat(idx)] != .rock) game.map.tiles[@intFromFloat(idx)] = null;
+                    if (
+                        (game.map.tiles[@intFromFloat(idx)] != .rock)
+                        and (game.map.tiles[@intFromFloat(idx)] != .grate)
+                    ) game.map.tiles[@intFromFloat(idx)] = null;
                 }
             }
         }

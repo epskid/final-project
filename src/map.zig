@@ -9,6 +9,7 @@ fn isSolid(tile: ps.ParticleType) bool {
         .packed_sand => true,
         .wood => true,
         .lava => false,
+        .grate => true,
         else => unreachable,
     };
 }
@@ -39,11 +40,12 @@ pub fn load(path: [:0]const u8) !Self {
                 's' => .packed_sand,
                 'w' => .wood,
                 'l' => .lava,
+                '#' => .grate,
                 '@' => {
                     self.artifact = .init(vec, .zero(), .common);
                     continue;
                 },
-                '#' => {
+                '%' => {
                     self.artifact = .init(vec, .zero(), .rare);
                     continue;
                 },
@@ -98,14 +100,19 @@ pub fn spawn(self: *Self, game: *Game) void {
                     var place: u32 = 0;
 
                     // sample the pixel color from the tileset
-                    if (maybe_tile) |tile| {
+                    if (maybe_tile) |tile| blk: {
                         var color = assets.tileset.getColor(@intCast(w + (@as(usize, @intCast(@intFromEnum(tile) - 1)) * consts.tile_size)), @intCast(h));
+                        if (color.a == 0) break :blk;
+
                         if (tile == .loose_sand or tile == .packed_sand) {
                             color = color.brightness(util.asf32(rl.getRandomValue(-20, 20)) / 100);
                         }
                         // pack the particle into a GLSL comparible format
                         place = @bitCast(ps.Particle.pack(.{
-                            .type = tile,
+                            .type = switch (tile) {
+                                .grate => .rock,
+                                inline else => |other| other,
+                            },
                             .color = color,
                         }));
                     }
