@@ -1,4 +1,4 @@
-                        
+                                        
                                        r
                                       rr
                                      rrr
@@ -19,12 +19,12 @@
                       rrrrrrrrrrrrrrrrrr
                      rrrrrrrrrrrrrrrrrrr
    ^                rrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrsssssssssssssssssssssssssssssss
-srrrrrrsssssssssssssssssssssssssssssssss
-srrrrrrsssssssssssssssssssssssssssssssss
-ssrrrrssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssssssssssssssssss                
-ssssssssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssssssssssssssssss
-rsrsrrsssrsrsrsrrrsrrsrrsrrsrrsrrsrrsrsr
+rrrrrrr            rrrrrrrrrrrrrrrrrrrrr
+rrrrrrrr               rrrrrrrrrrrrrrrrr
+rrrrrrrrrrr                             
+rrrrrrrrrrrr                            
+rrrrrrrrrrrrrrrrrr    
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

@@ -155,23 +155,32 @@ pub fn tick(self: *Self, game: *Game) !void {
 
     // run physics on the player
     // expand the hitbox if they're carrying an artifact
-    const collide_results = util.moveAndCollide(&self.position, &self.velocity, .{
-        .x = 0,
-        .y = if (self.artifact != null) -consts.tile_size else 0,
-        .width = consts.tile_size,
-        .height = if (self.artifact != null) (2 * consts.tile_size - 1) else consts.tile_size,
-    }, game.map);
+    const collision = util.moveAndCollide(
+        &self.position,
+        &self.velocity,
+        .{
+            .x = 0,
+            .y = if (self.artifact != null) -consts.tile_size else 0,
+            .width = consts.tile_size,
+            .height = if (self.artifact != null) (2 * consts.tile_size) else consts.tile_size,
+        },
+        game.map,
+    );
 
     // update states
-    self.grounded = collide_results.grounded;
+    self.grounded = collision.grounded;
 
-    // keep player in-bounds if nothing lies of screen
+    // keep player in-bounds if nothing lies off screen
     // or advance them if there is
     if (!game.level.advance(game)) {
         const old_pos = self.position;
-        self.position = self.position.clamp(.init(-0.5 * consts.tile_size, -0.5 * consts.tile_size), .init(consts.width - (consts.tile_size / 2), consts.height));
+        self.position = self.position.clamp(
+            .init(0, 0),
+            .init(consts.width - consts.tile_size, consts.height - consts.tile_size),
+        );
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;
+        } else {
         }
         if (old_pos.y != self.position.y) {
             self.velocity.y = 0;

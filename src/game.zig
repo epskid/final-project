@@ -59,6 +59,9 @@ pub fn spawn(self: *Self, ticker: Ticker) !void {
 }
 
 pub fn tick(self: *Self) !void {
+    self.level.dialog.tick(self);
+    if (self.level.dialog.active != null) return;
+
     // tick the tickers
     var i = self.tickers.items.len;
     while (i > 0) {
@@ -105,6 +108,8 @@ pub fn draw(self: *const Self) void {
     const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "SCORE: {}", .{self.score}, 0) catch unreachable;
     defer self.global_allocator.free(score_str);
     rl.drawText(score_str, 16, 16, 16, .white);
+
+    self.level.dialog.draw(self.global_allocator) catch unreachable;
 }
 
 pub fn getNewState(_: *const Self) ?s.NewStateInfo {

@@ -84,7 +84,24 @@ pub fn main() !void {
             const scale = util.getScale();
 
             rl.clearBackground(.black);
-            rl.drawTexturePro(render.texture, .init(0.0, 0.0, util.asf32(render.texture.width), util.asf32(-render.texture.height)), .init((util.asf32(rl.getScreenWidth()) - (util.asf32(consts.width) * scale)) * 0.5, (util.asf32(rl.getScreenHeight()) - (util.asf32(consts.height) * scale)) * 0.5, util.asf32(consts.width) * scale, util.asf32(consts.height) * scale), .zero(), 0.0, .white);
+            rl.drawTexturePro(
+                render.texture,
+                .init(
+                    0.0,
+                    0.0,
+                    util.asf32(render.texture.width),
+                    util.asf32(-render.texture.height),
+                ),
+                .init(
+                    (util.asf32(rl.getScreenWidth()) - (util.asf32(consts.width) * scale)) * 0.5,
+                    (util.asf32(rl.getScreenHeight()) - (util.asf32(consts.height) * scale)) * 0.5,
+                    util.asf32(consts.width) * scale,
+                    util.asf32(consts.height) * scale,
+                ),
+                .zero(),
+                0.0,
+                .white,
+            );
         }
     }
 }

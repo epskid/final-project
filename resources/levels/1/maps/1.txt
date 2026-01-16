@@ -1,14 +1,14 @@
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 r                                      r
-r                                      r
-r                      S         S     r
+r                                 S    r
+r                      S         #S    r
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
-r                                      r
-r                                      r
-r                                S     r
-r                 S             #S     r
+r                                       
+r                                       
+r                                       
+r                 S              S      
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
@@ -19,12 +19,12 @@ r                        S             r
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
 rwwwwwwwwwwwwwwssssssssssssssssssssssssr
-                          www          r
-                          www          r
-                          www          r
-                          www          r
-                          www          r
-                          www          r
+r                         www          r
+r                         www          r
+r                         www          r
+r                         www          r
+r                         www          r
+r                         www          r
                           www           
                           www           
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

@@ -48,7 +48,7 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "TUNNEL")) {
+        if (util.button(rect, "PILOT")) {
             self.selected_level = 0;
             self.next_state = .playing;
         }
@@ -57,7 +57,7 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "TUNNEL... 2!")) {
+        if (util.button(rect, "TUNNEL")) {
             self.selected_level = 1;
             self.next_state = .playing;
         }
@@ -66,7 +66,7 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "BACK")) {
+        if (util.button(rect, "BACK")) {
             self.level_select = false;
         }
 
@@ -84,7 +84,7 @@ pub fn drawMain(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "PLAY")) {
+        if (util.button(rect, "PLAY")) {
             self.level_select = true;
         }
 
@@ -92,7 +92,7 @@ pub fn drawMain(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "SETTINGS")) {
+        if (util.button(rect, "SETTINGS")) {
             self.next_state = .settings;
         }
 
@@ -100,7 +100,7 @@ pub fn drawMain(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "CONTROLS")) {
+        if (util.button(rect, "CONTROLS")) {
             self.next_state = .controls;
         }
 
@@ -108,7 +108,7 @@ pub fn drawMain(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "QUIT")) {
+        if (util.button(rect, "QUIT")) {
             should_close = true;
         }
 

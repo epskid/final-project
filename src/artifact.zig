@@ -35,7 +35,7 @@ pub fn tick(self: *Self, game: *Game) void {
         &self.position,
         &self.velocity,
         .init(0, 0, consts.tile_size, consts.tile_size),
-        game.map
+        game.map,
     );
 }
 

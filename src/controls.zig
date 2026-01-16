@@ -55,7 +55,7 @@ pub fn draw(self: *Self) void {
     }
 
     {
-        if (rg.button(rect, "BACK")) {
+        if (util.button(rect, "BACK")) {
             self.should_return = true;
         }
 
@@ -85,6 +85,7 @@ pub fn deinit(self: *Self, allocator: std.mem.Allocator) void {
 }
 
 const s = @import("state.zig");
+const util = @import("util.zig");
 const consts = @import("consts.zig");
 
 const rl = @import("raylib");

@@ -1,0 +1,11 @@
+0::
+You are Employee 6A616D6573.
+This is your final project.
+Once you get inside that pyramid, you are cursed.
+Do your duty for the good of humanity.
+We need data.
+2::
+Don't touch lava.
+You'll ruin the data.
+Be careful.
+It flows faster than you think.

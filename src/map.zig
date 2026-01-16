@@ -25,8 +25,8 @@ pub fn load(path: [:0]const u8) !Self {
     };
     @memset(&self.tiles, null);
 
-    const text = rl.loadFileText(path);
-    defer rl.unloadFileText(text);
+    const text = try rl.loadFileData(path);
+    defer rl.unloadFileData(text);
 
     var lines = std.mem.splitScalar(u8, text, '\n');
     var y: usize = 0;

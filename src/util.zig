@@ -35,8 +35,16 @@ pub const MoveAndCollideResult = struct {
     grounded: bool,
 };
 
-pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbox: rl.Rectangle, map: *const Map) MoveAndCollideResult {
+const skin_width = 0.1;
+pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbox_with_skin: rl.Rectangle, map: *const Map) MoveAndCollideResult {
     // update position and velocity based on collisions and return some helpful data
+
+    const hitbox: rl.Rectangle = .init(
+        hitbox_with_skin.x + skin_width,
+        hitbox_with_skin.y + skin_width,
+        hitbox_with_skin.width - (skin_width * 2),
+        hitbox_with_skin.height - (skin_width * 2),
+    );
 
     const dt = rl.getFrameTime();
     const dv_max = velocity.scale(dt); // get maximum displacement allowed
@@ -86,9 +94,20 @@ pub inline fn texFromImg(file: [:0]const u8) !rl.Texture2D {
     return try rl.loadTextureFromImage(img);
 }
 
+pub inline fn button(bounds: rl.Rectangle, text: [:0]const u8) bool {
+    const result = rg.button(bounds, text);
+    if (result) {
+       rl.stopSound(assets.ui_sound);
+       rl.playSound(assets.ui_sound);
+    }
+    return result;
+}
+
 const Map = @import("map.zig");
 const Settings = @import("settings.zig");
 
 const consts = @import("consts.zig");
+const assets = @import("assets.zig");
 
 const rl = @import("raylib");
+const rg = @import("raygui");

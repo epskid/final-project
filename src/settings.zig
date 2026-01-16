@@ -53,14 +53,17 @@ pub fn draw(self: *Self) void {
 
         var buf: [4]u8 = undefined;
         const vol = std.fmt.bufPrintZ(&buf, "{}", .{@as(i32, @intFromFloat(new_volume))}) catch unreachable;
-        _ = rg.sliderBar(rect, "", vol, &new_volume, 0, 100);
+        if (rg.sliderBar(rect, "", vol, &new_volume, 0, 100) == 1) {
+            rl.stopSound(assets.volume_sound);
+            rl.playSound(assets.volume_sound);
+        }
         rl.setMasterVolume(new_volume / 100);
 
         rect.y += 16 + 4;
     }
 
     {
-        if (rg.button(rect, "BACK")) {
+        if (util.button(rect, "BACK")) {
             self.should_return = true;
         }
 
@@ -90,7 +93,9 @@ pub fn deinit(self: *Self, allocator: std.mem.Allocator) void {
 }
 
 const s = @import("state.zig");
+const util = @import("util.zig");
 const consts = @import("consts.zig");
+const assets = @import("assets.zig");
 
 const rl = @import("raylib");
 const rg = @import("raygui");

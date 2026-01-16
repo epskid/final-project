@@ -1,8 +1,8 @@
-                        
+                                        
                                        r
                                       rr
                                      rrr
-                       S            rrrr
+                                    rrrr
                                    rrrrr
                                   rrrrrr
                                  rrrrrrr
@@ -19,12 +19,12 @@
                       rrrrrrrrrrrrrrrrrr
                      rrrrrrrrrrrrrrrrrrr
    ^                rrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrsssssssssssssssssssssssssssssss
-srrrrrrsssssssssssssssssssssssssssssssss
-srrrrrrsssssssssssssssssssssssssssssssss
-ssrrrrssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssssssssssssssssss                
+rrrrrrrrrsssssssssssrrrrrrrrrrrrrrrrrrrr
+srrrrrrssssssssssssssrrrrrrrrrrrrrrrrrrr
+srrrrrrssssssssssssssssrrrsrrrsrrrrrrrrr
+ssrrrrssssssssssssssssssrsrsrrrsrrrrrrrr
+sssssssssssssssssssssssssssssrrssrrrsrrr
+sssssssssssssssssssssssssssssssssssssssr                
 ssssssssssssssssssssssssssssssssssssssss
 ssssssssssssssssssssssssssssssssssssssss
 rsrsrrsssrsrsrsrrrsrrsrrsrrsrrsrrsrrsrsr
