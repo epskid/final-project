@@ -69,8 +69,6 @@ pub fn tick(self: *Self, game: *Game) !void {
                 });
 
                 // update map
-                if (@abs(@as(i32, @intCast(@abs(x_rel))) - x_slice) < consts.tile_size) continue;
-                if (@abs(@as(i32, @intCast(@abs(y_rel))) - @as(i32, @intCast(rad))) < consts.tile_size) continue;
                 var map_x: f32 = @as(f32, @floatFromInt(x)) / consts.tile_size;
                 map_x = if (x_rel < 0) @ceil(map_x) else @floor(map_x);
                 var map_y: f32 = @as(f32, @floatFromInt(y)) / 16;
