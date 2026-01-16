@@ -175,8 +175,8 @@ pub fn tick(self: *Self, game: *Game) !void {
     if (!game.level.advance(game)) {
         const old_pos = self.position;
         self.position = self.position.clamp(
-            .init(0, 0),
-            .init(consts.width - consts.tile_size, consts.height - consts.tile_size),
+            .init(-12, -12),
+            .init(consts.width - 4, consts.height - 4),
         );
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;

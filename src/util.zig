@@ -21,6 +21,15 @@ pub inline fn mkTileHitboxAt(pos: rl.Vector2) rl.Rectangle {
     );
 }
 
+pub inline fn skinHitbox(hitbox: rl.Rectangle) rl.Rectangle {
+    return .init(
+        hitbox.x + consts.skin_width,
+        hitbox.y + consts.skin_width,
+        hitbox.width - (consts.skin_width * 2),
+        hitbox.height - (consts.skin_width * 2),
+    );
+}
+
 inline fn mkHitbox(pos: rl.Vector2, hitbox: rl.Rectangle) rl.Rectangle {
     // utility function for use within another utility function
     return .init(
@@ -35,16 +44,10 @@ pub const MoveAndCollideResult = struct {
     grounded: bool,
 };
 
-const skin_width = 0.1;
 pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbox_with_skin: rl.Rectangle, map: *const Map) MoveAndCollideResult {
     // update position and velocity based on collisions and return some helpful data
 
-    const hitbox: rl.Rectangle = .init(
-        hitbox_with_skin.x + skin_width,
-        hitbox_with_skin.y + skin_width,
-        hitbox_with_skin.width - (skin_width * 2),
-        hitbox_with_skin.height - (skin_width * 2),
-    );
+    const hitbox: rl.Rectangle = skinHitbox(hitbox_with_skin);
 
     const dt = rl.getFrameTime();
     const dv_max = velocity.scale(dt); // get maximum displacement allowed
