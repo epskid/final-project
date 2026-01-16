@@ -104,6 +104,7 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
 
     // particle collisions
+    const prev_suffoc = self.suffocating;
     {
         var sand_count: u32 = 0;
         var lava_count: u32 = 0;
@@ -125,10 +126,8 @@ pub fn tick(self: *Self, game: *Game) !void {
                 }
             }
         }
-        const prev_suffoc = self.suffocating;
         self.suffocating = sand_count > 200;
         if (self.suffocating) {
-            if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
             if (self.suffocation) |*suf| {
                 suf.* -= dt;
                 if (suf.* < 0) {
@@ -139,7 +138,6 @@ pub fn tick(self: *Self, game: *Game) !void {
                 self.suffocation = suffocation_time;
             }
         } else if (self.suffocation) |*suf| {
-            rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
             suf.* += 2 * dt;
             if (suf.* > suffocation_time) self.suffocation = null;
         }
@@ -148,6 +146,10 @@ pub fn tick(self: *Self, game: *Game) !void {
             return;
         }
     }
+
+    // add filters
+    if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter)
+    else if (!self.suffocating) rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
 
     // get slowed down in sand
     if (self.suffocating) self.velocity = self.velocity.scale(sand_speed);
