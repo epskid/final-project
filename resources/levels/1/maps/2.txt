@@ -1,7 +1,7 @@
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 r        llllllrrrrrrrrrrrrrrrrrrrrrrrrr
 r        llllllrrrrrrrrrrrrrrrrrrrrrrrrr
-r  $     llllllrrrrrrrrrrrrrrrrrrrrrrrrr
+r  +     llllllrrrrrrrrrrrrrrrrrrrrrrrrr
 rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

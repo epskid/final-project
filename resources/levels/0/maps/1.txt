@@ -1,30 +1,30 @@
-                                        
-                                       r
-                                      rr
-                                     rrr
-                                    rrrr
-                                   rrrrr
-                                  rrrrrr
-                                 rrrrrrr
-                                rrrrrrrr
-                               rrrrrrrrr
-                              rrrrrrrrrr
-                             rrrrrrrrrrr
-                            rrrrrrrrrrrr
-                           rrrrrrrrrrrrr
-                          rrrrrrrrrrrrrr
-                         rrrrrrrrrrrrrrr
-                        rrrrrrrrrrrrrrrr
-                       rrrrrrrrrrrrrrrrr
-                      rrrrrrrrrrrrrrrrrr
-                     rrrrrrrrrrrrrrrrrrr
-   ^                rrrrrrrrrrrrrrrrrrrr
-rrrrrrr            rrrrrrrrrrrrrrrrrrrrr
-rrrrrrrr               rrrrrrrrrrrrrrrrr
-rrrrrrrrrrr                             
-rrrrrrrrrrrr                            
-rrrrrrrrrrrrrrrrrr    
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrr          rr
+rrrrrrrrrrrrrrrrrrrrrrrrrrr          rrr
+rrrrrrrrrrrrrrrrrrrrrrrr         rrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrr s sss rrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrsssssssrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrr  sssssssrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrr         srrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrr          rrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrr        rrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrr         rrrrrrrrrrrrrr
+rrrrrrrrrrrrrr ssss      rrrrrrrrrrrrrrr
+rrrrrrrrrrrrssssssssssssrrrrrrrrrrrrrrrr
+rrrrrrrrrr  ssssssssssssrrrrrrrrrrrrrrrr
+rrrrrrrrr    ssssssssssrrrrrrrrrrrrrrrrr
+rrrrrrr               rrrrrrrrrrrrrrrrrr
+rrrrrrr              rrrrrrrrrrrrrrrrrrr
+rrrrrrr             rrrrrrrrrrrrrrrrrrrr
+rrrrrr        sssss rrrrrrrrrrrrrrrrrrrr
+rrrrrrssssssssssssssrrrrrrrrrrrrrrrrrrrr
+rrrrrrssssssssssssssrrrrrrrrrrrrrrrrrrrr
+rrrrrrsss   ssssss  rrrrrrrrrrrrrrrrrrrr
+rrrrrrrs           rrrrrrrrrrrrrrrrrrrrr
+rrrrrrrr          rrrrrrrrrrrrrrrrrrrrrr
+                    Swwwww wwwwwwww wwww
+                   SSwww wwwwww www wwww
+                   SSwwwwww   ww www www
+rrrrrrrr##########rrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrr          rrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrr          rrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrr          rrrrrrrrrrrrrrrrrrrrrr

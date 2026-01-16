@@ -14,6 +14,7 @@ active: usize, // index of the current map
 maps: []Map, // all maps in the level
 graph: std.AutoHashMap(usize, Connections), // bidirectional graph of connections between maps
 dialog: Dialog,
+quota: usize,
 
 fn toChar(ch: u8) ?u8 {
     return if (ch == ' ') null else ch;
@@ -37,6 +38,7 @@ pub fn load(path: [:0]const u8, game: *Game) !Self {
     const grid = try grid_list.toOwnedSlice(game.global_allocator);
     defer game.global_allocator.free(grid);
     var map_char_list = std.ArrayList(u8).empty;
+    var quota: usize = 0;
 
     for (grid) |row| {
         for (row) |ch| {
@@ -46,8 +48,15 @@ pub fn load(path: [:0]const u8, game: *Game) !Self {
             defer game.global_allocator.free(map_path);
 
             const map = try Map.load(map_path);
-            try maps.append(game.global_allocator, map);
-            try map_char_list.append(game.global_allocator, ch);
+            if (map.artifact) |af| quota += af.rarity.toScore();
+            // 0 defines the starting map
+            if (ch != '0') {
+                try maps.append(game.global_allocator, map);
+                try map_char_list.append(game.global_allocator, ch);
+            } else {
+                try maps.insert(game.global_allocator, 0, map);
+                try map_char_list.insert(game.global_allocator, 0, ch);
+            }
         }
     }
 
@@ -73,6 +82,7 @@ pub fn load(path: [:0]const u8, game: *Game) !Self {
 
     return .{
         .active = 0,
+        .quota = @divFloor(quota, 2),
         .maps = try maps.toOwnedSlice(game.global_allocator),
         .graph = graph,
         .dialog = dialog,

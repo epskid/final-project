@@ -108,6 +108,14 @@ pub fn drawMain(self: *Self) void {
     }
 
     {
+        if (util.button(rect, "CREDITS")) {
+            self.next_state = .credits;
+        }
+
+        rect.y += 16 + 4;
+    }
+
+    {
         if (util.button(rect, "QUIT")) {
             should_close = true;
         }
@@ -124,7 +132,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
             .new_state = .{
                 .needs_init = ns,
             },
-            .deinit = ns == .playing,
+            .deinit = (ns == .playing) or (ns == .credits),
         };
     }
 

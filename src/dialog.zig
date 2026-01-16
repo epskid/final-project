@@ -36,11 +36,16 @@ pub fn load(file: []const u8, idxs: []const u8, allocator: std.mem.Allocator) !S
 }
 
 pub fn tick(self: *Self, game: *Game) void {
+    if (settings.skip_dialogue) {
+        self.active = null;
+        return;
+    }
+
     if (self.active) |idx| {
         const ptr = self.dialog.getPtr(idx).?;
         if (self.talk < ptr.lines.peek().?.len) {
             self.talk += 1;
-        } else if (rl.isKeyPressed(.q)) {
+        } else if (rl.getKeyPressed() != .null) {
             self.talk = 0;
             ptr.remaining -= 1;
             if (ptr.remaining == 0) self.active = null;
@@ -55,6 +60,8 @@ pub fn tick(self: *Self, game: *Game) void {
 
 const size = 16;
 pub fn draw(self: *const Self, allocator: std.mem.Allocator) !void {
+    if (settings.skip_dialogue) return;
+
     if (self.active) |idx| {
         var line = self.dialog.get(idx).?;
         const line_z = try allocator.dupeZ(u8, line.lines.peek().?[0..self.talk]);
@@ -78,6 +85,7 @@ pub fn unload(self: *Self) void {
 const Game = @import("game.zig");
 
 const consts = @import("consts.zig");
+const settings = @import("settings.zig");
 
 const rl = @import("raylib");
 const std = @import("std");

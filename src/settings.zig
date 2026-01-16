@@ -18,6 +18,9 @@ pub var fractional_scaling: bool = true;
 // show fps in top left
 pub var show_fps: bool = false;
 
+// skip all dialogue
+pub var skip_dialogue: bool = false;
+
 pub fn tick(_: *Self) !void {}
 
 pub fn draw(self: *Self) void {
@@ -41,6 +44,13 @@ pub fn draw(self: *Self) void {
     {
         const message = if (show_fps) "SHOW FPS [ON]" else "SHOW FPS [OFF]";
         _ = rg.toggle(rect, message, &show_fps);
+
+        rect.y += 16 + 4;
+    }
+
+    {
+        const message = if (skip_dialogue) "SKIP DIALOGUE [ON]" else "SKIP DIALOGUE [OFF]";
+        _ = rg.toggle(rect, message, &skip_dialogue);
 
         rect.y += 16 + 4;
     }

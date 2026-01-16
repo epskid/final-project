@@ -25,7 +25,7 @@ pub fn draw(self: *Self) void {
     }
 
     {
-        _ = rg.label(rect, "Q - INTERACT");
+        _ = rg.label(rect, "ANY KEY - ADVANCE DIALOGUE");
 
         rect.y += 16 + 4;
     }

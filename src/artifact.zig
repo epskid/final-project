@@ -10,8 +10,8 @@ pub const Rarity = enum {
         return switch (self) {
             .common => 1,
             .rare => 2,
-            .epic => 4,
-            .legendary => 8,
+            .epic => 3,
+            .legendary => 4,
         };
     }
 };

@@ -18,6 +18,8 @@ pub const State = union(enum) {
     controls: ?*Controls,
     settings: ?*Settings,
     playing: ?*Game,
+    stats: ?*Stats,
+    credits: ?*Credits,
 
     pub fn tick(self: State) !void {
         switch (self) {
@@ -53,6 +55,12 @@ pub const State = union(enum) {
                 game.* = try .init(allocator);
                 return .{ .playing = game };
             },
+            .credits => {
+                const credits = try allocator.create(Credits);
+                credits.* = .init();
+                return .{ .credits = credits };
+            },
+            else => unreachable
         }
     }
 
@@ -107,6 +115,8 @@ pub const State = union(enum) {
 
 const Menu = @import("menu.zig");
 const Game = @import("game.zig");
+const Stats = @import("stats.zig");
+const Credits = @import("credits.zig");
 const Controls = @import("controls.zig");
 const Settings = @import("settings.zig");
 

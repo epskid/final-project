@@ -13,6 +13,7 @@ map_arena: std.heap.ArenaAllocator,
 simulation: ps.Simulation,
 particles: []ps.Particle.GLSLRepr,
 score: usize,
+deaths: usize,
 
 pub fn init(allocator: std.mem.Allocator) !Self {
     // load the particle simulation
@@ -30,6 +31,7 @@ pub fn init(allocator: std.mem.Allocator) !Self {
         ),
         .particles = try allocator.alloc(ps.Particle.GLSLRepr, consts.width * consts.height),
         .score = 0,
+        .deaths = 0,
     };
 }
 
@@ -103,22 +105,60 @@ pub fn draw(self: *const Self) void {
 
     if (self.player.died or self.player.suffocating) self.player.draw();
 
-    if (Settings.show_fps) rl.drawFPS(32, 32);
+    if (Settings.show_fps) rl.drawFPS(0, 0);
 
-    const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "SCORE: {}", .{self.score}, 0) catch unreachable;
+    const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "QUOTA: {}/{}", .{ self.score, self.level.quota }, 0) catch unreachable;
     defer self.global_allocator.free(score_str);
-    rl.drawText(score_str, 16, 16, 16, .white);
+    rl.drawText(score_str, 32, 32, 16, .white);
 
     self.level.dialog.draw(self.global_allocator) catch unreachable;
 }
 
-pub fn getNewState(_: *const Self) ?s.NewStateInfo {
+pub fn getNewState(self: *const Self) ?s.NewStateInfo {
     if (rl.isKeyDown(.escape)) return .{
         .new_state = .{
             .needs_init = .settings,
         },
         .deinit = false,
-    } else return null;
+    } else if (self.map.tractor_beam) |tb| {
+        if (
+            (self.player.position.y < 0)
+            and (self.player.position.x > (tb.bottom.x - TractorBeam.width))
+            and (self.player.position.x < (tb.bottom.x + TractorBeam.width))
+        ) {
+            const result = blk: {
+                const stats = Stats.init(
+                    self.global_allocator,
+                    self.score,
+                    self.level.quota,
+                    self.deaths,
+                ) catch |e| break :blk e;
+                const stats_dupe = self.global_allocator.create(Stats) catch |e| break :blk e;
+                stats_dupe.* = stats;
+                break :blk s.NewStateInfo {
+                    .new_state = .{
+                        .inited = .{
+                            .stats = stats_dupe,
+                        },
+                    },
+                    .deinit = true,
+                };
+            } catch |err| {
+                std.log.err("failed to initialize stats: {}\n", .{err});
+                std.log.warn("kickin' to menu\n", .{});
+                return .{
+                    .new_state = .{
+                        .needs_init = .menu,
+                    },
+                    .deinit = true,
+                };
+            };
+
+            return result;
+        }
+    }
+
+    return null;
 }
 
 pub fn freeLocal(self: *Self) void {
@@ -135,10 +175,12 @@ pub fn deinit(self: *Self, _: std.mem.Allocator) void {
 }
 
 const Map = @import("map.zig");
+const Stats = @import("stats.zig");
 const Level = @import("level.zig");
 const Player = @import("player.zig");
 const Ticker = @import("ticker.zig");
 const Settings = @import("settings.zig");
+const TractorBeam = @import("tractor_beam.zig");
 
 const s = @import("state.zig");
 const ps = @import("particle_spec.zig");

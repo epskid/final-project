@@ -32,11 +32,15 @@ pub fn init() Self {
     };
 }
 
+const suffocating_filter = util.lowpassFilter(1000);
 pub fn tick(self: *Self, game: *Game) !void {
     if (self.died) {
         rl.stopMusicStream(assets.main_music);
         rl.updateMusicStream(assets.main_music);
-        if (rl.getKeyPressed() != .null) self.respawn(game);
+        if (rl.getKeyPressed() != .null) {
+            game.deaths += 1;
+            self.respawn(game);
+        }
         return;
     }
     if (self.exploding) |*ex| {
@@ -80,7 +84,7 @@ pub fn tick(self: *Self, game: *Game) !void {
 
     // pick up an artifact
     if (game.map.artifact) |af| {
-        if (rl.isKeyPressed(.q) and rl.checkCollisionRecs(
+        if (rl.checkCollisionRecs(
             util.mkTileHitboxAt(self.position),
             util.mkTileHitboxAt(af.position),
         )) {
@@ -90,11 +94,12 @@ pub fn tick(self: *Self, game: *Game) !void {
 
     // put artifact in tractor beam
     if (game.map.tractor_beam) |*tb| {
-        if (rl.isKeyPressed(.q) and rl.checkCollisionRecs(
+        if ((self.artifact != null) and rl.checkCollisionRecs(
             util.mkTileHitboxAt(self.position),
             tb.getHitbox(),
         )) {
-            std.mem.swap(?Artifact, &self.artifact, &tb.artifact);
+            tb.artifact = self.artifact;
+            self.artifact = null;
         }
     }
 
@@ -120,8 +125,10 @@ pub fn tick(self: *Self, game: *Game) !void {
                 }
             }
         }
+        const prev_suffoc = self.suffocating;
         self.suffocating = sand_count > 200;
         if (self.suffocating) {
+            if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
             if (self.suffocation) |*suf| {
                 suf.* -= dt;
                 if (suf.* < 0) {
@@ -132,6 +139,7 @@ pub fn tick(self: *Self, game: *Game) !void {
                 self.suffocation = suffocation_time;
             }
         } else if (self.suffocation) |*suf| {
+            rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
             suf.* += 2 * dt;
             if (suf.* > suffocation_time) self.suffocation = null;
         }
@@ -229,7 +237,7 @@ pub fn respawn(self: *Self, game: *Game) void {
 }
 
 pub fn spawnAtTractor(self: *Self, game: *Game) void {
-    self.position.x = game.map.tractor_beam.?.bottom.x;
+    self.position.x = game.map.tractor_beam.?.bottom.x - consts.tile_size / 2;
     self.position.y = 0;
 }
 

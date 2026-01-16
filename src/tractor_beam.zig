@@ -1,6 +1,6 @@
 const Self = @This();
 
-const width = 64;
+pub const width = 64;
 const num_rings = 8;
 
 bottom: rl.Vector2,
@@ -24,7 +24,10 @@ pub fn tick(self: *Self, game: *Game) void {
             self.scoring_applied = true;
         }
 
-        af.position.y -= 100 * rl.getFrameTime();
+        af.position.y -= 500 * rl.getFrameTime();
+        af.position.x -= self.bottom.x - consts.tile_size / 2;
+        af.position.x /= 1.1;
+        af.position.x += self.bottom.x - consts.tile_size / 2;
 
         if (af.position.y < -consts.tile_size) {
             self.artifact = null;

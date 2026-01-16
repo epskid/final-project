@@ -15,13 +15,30 @@ We need to research artifacts from various locations.
 One of these locations lies in front of you here.
 You must go inside and retrieve as many artifacts as you can.
 Bring them back to our beam and release them.
-There are some caveats though.
-The sand here... clogs our air support systems.
-So don't stay in it for too long.
-More, these pyramids are enchanted with ancient magic.
+But these pyramids are enchanted with ancient magic.
 Once you enter, you have a minute left to live.
 So move fast. If you die, you're replaceable.
-Just don't die while holding an artifact.
-You'll figure out the rest.
+When you have one, come straight back to us.
+We made it so that you can't put them down.
+So don't die while holding an artifact.
 ...i really have to repeat that to every single one?...
 ...there's thousands of them here...
+1::
+I forgot to mention that there are multiple tiers of artifacts.
+There is an *optional* quota you are recommended to achieve.
+More valuable artifacts count more towards it.
+If you can, try to achieve it.
+2::
+If you think you have all the artifacts you can get, you can come back to us.
+Just propel yourself up the beam, and we'll be out of here.
+3::
+The sand here clogs our air support systems.
+It causes you to suffocate.
+So don't stay in it for too long.
+Suffocation combined with... the medications you're on...
+Can cause mild hallucinations.
+Use this to your advantage.
+One more thing.
+Some artifacts may become impossible to get if you mess up.
+It's okay -- you're going to die anyway.
+So there's no punishment for you.
