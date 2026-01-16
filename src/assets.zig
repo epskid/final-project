@@ -23,7 +23,7 @@ pub fn load() !void {
     inside = try util.texFromImg("resources/sprites/inside.png");
 
     ui_sound = try rl.loadSound("resources/sound/select.ogg");
-    volume_sound = try rl.loadSound("resources/sound/volume.wav");
+    volume_sound = try rl.loadSound("resources/sound/volume.ogg");
     menu_music = try rl.loadMusicStream("resources/sound/menu.ogg");
     main_music = try rl.loadMusicStream("resources/sound/main.ogg");
     main_music.looping = false;

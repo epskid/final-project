@@ -54,8 +54,7 @@ pub fn draw(self: *Self) void {
         var buf: [4]u8 = undefined;
         const vol = std.fmt.bufPrintZ(&buf, "{}", .{@as(i32, @intFromFloat(new_volume))}) catch unreachable;
         if (rg.sliderBar(rect, "", vol, &new_volume, 0, 100) == 1) {
-            rl.stopSound(assets.volume_sound);
-            rl.playSound(assets.volume_sound);
+            if (!rl.isSoundPlaying(assets.volume_sound)) rl.playSound(assets.volume_sound);
         }
         rl.setMasterVolume(new_volume / 100);
 
