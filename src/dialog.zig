@@ -67,7 +67,7 @@ pub fn draw(self: *const Self, allocator: std.mem.Allocator) !void {
         var line = self.dialog.get(idx).?;
         const line_z = try allocator.dupeZ(u8, line.lines.peek().?[0..self.talk]);
         defer allocator.free(line_z);
-        const width = util.measureText(line_z, 16);
+        const width = util.measureText(line_z, size);
         util.drawText(
             line_z,
             consts.width / 2 - @divFloor(width, 2),
