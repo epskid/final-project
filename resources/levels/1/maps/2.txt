@@ -1,10 +1,10 @@
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-r        llllllrrrrrrrrrrrrrrrrrrrrrrrrr
-r        llllllrrrrrrrrrrrrrrrrrrrrrrrrr
-r  +     llllllrrrrrrrrrrrrrrrrrrrrrrrrr
-rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-rssssssrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrr          r
+r        llllllrrrrrrrrrrrrrr          r
+r        llllllrrrrrrrrrrrrrr          r
+r  +     llllllrrrrrrrrrrrrrr          r
+rssssssrrrrrrrrrrrrrrrrrrrrrr          r
+rssssssrrrrrrrrrrrrrrrrrrrrrr          r
+rssssssrrrrrrrrrrrrrrrrrrrrrr          r
                                        r
                                        r
                                        r

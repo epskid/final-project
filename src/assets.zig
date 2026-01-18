@@ -12,6 +12,8 @@ pub var ui_sound: rl.Sound = undefined;
 pub var volume_sound: rl.Sound = undefined;
 pub var shoot_sound: rl.Sound = undefined;
 pub var explosion_sound: rl.Sound = undefined;
+pub var talk_sound: rl.Sound = undefined;
+pub var artifact_sound: rl.Sound = undefined;
 
 pub var menu_music: rl.Music = undefined;
 pub var main_music: rl.Music = undefined;
@@ -29,6 +31,8 @@ pub fn load() !void {
     volume_sound = try rl.loadSound("resources/sound/volume.ogg");
     shoot_sound = try rl.loadSound("resources/sound/shoot.ogg");
     explosion_sound = try rl.loadSound("resources/sound/explosion.ogg");
+    talk_sound = try rl.loadSound("resources/sound/talk.ogg");
+    artifact_sound = try rl.loadSound("resources/sound/artifact.ogg");
 
     menu_music = try rl.loadMusicStream("resources/sound/menu.ogg");
     main_music = try rl.loadMusicStream("resources/sound/main.ogg");
@@ -45,6 +49,8 @@ pub fn unload() void {
     rl.unloadSound(volume_sound);
     rl.unloadSound(shoot_sound);
     rl.unloadSound(explosion_sound);
+    rl.unloadSound(talk_sound);
+    rl.unloadSound(artifact_sound);
 
     rl.unloadMusicStream(menu_music);
     rl.unloadMusicStream(main_music);

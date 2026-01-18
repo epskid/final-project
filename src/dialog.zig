@@ -45,6 +45,7 @@ pub fn tick(self: *Self, game: *Game) void {
         const ptr = self.dialog.getPtr(idx).?;
         if (self.talk < ptr.lines.peek().?.len) {
             self.talk += 1;
+            if (!rl.isSoundPlaying(assets.talk_sound)) rl.playSound(assets.talk_sound);
         } else if (rl.getKeyPressed() != .null) {
             self.talk = 0;
             ptr.remaining -= 1;
@@ -85,6 +86,7 @@ pub fn unload(self: *Self) void {
 const Game = @import("game.zig");
 
 const consts = @import("consts.zig");
+const assets = @import("assets.zig");
 const settings = @import("settings.zig");
 
 const rl = @import("raylib");

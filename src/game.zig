@@ -128,8 +128,6 @@ pub fn draw(self: *const Self) void {
 
 pub fn getNewState(self: *const Self) ?s.NewStateInfo {
     if (rl.isKeyDown(.escape)) {
-        rl.pauseMusicStream(assets.main_music);
-        rl.updateMusicStream(assets.main_music);
         return .{
             .new_state = .{
                 .needs_init = .settings,

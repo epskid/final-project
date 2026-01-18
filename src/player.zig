@@ -83,12 +83,16 @@ pub fn tick(self: *Self, game: *Game) !void {
     self.velocity.y += consts.gravity * dt;
 
     // pick up an artifact
-    if (game.map.artifact) |af| {
-        if (rl.checkCollisionRecs(
-            util.mkTileHitboxAt(self.position),
-            util.mkTileHitboxAt(af.position),
-        )) {
-            std.mem.swap(?Artifact, &self.artifact, &game.map.artifact);
+    if (self.artifact == null) {
+        if (game.map.artifact) |af| {
+            if (rl.checkCollisionRecs(
+                util.mkTileHitboxAt(self.position),
+                util.mkTileHitboxAt(af.position),
+            )) {
+                rl.playSound(assets.artifact_sound);
+                self.artifact = game.map.artifact;
+                game.map.artifact = null;
+            }
         }
     }
 
@@ -148,8 +152,7 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
 
     // add filters
-    if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter)
-    else if (!self.suffocating) rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
+    if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter) else if (!self.suffocating) rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
 
     // get slowed down in sand
     if (self.suffocating) self.velocity = self.velocity.scale(sand_speed);
@@ -190,8 +193,7 @@ pub fn tick(self: *Self, game: *Game) !void {
         );
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;
-        } else {
-        }
+        } else {}
         if (old_pos.y != self.position.y) {
             self.velocity.y = 0;
 

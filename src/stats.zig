@@ -8,17 +8,17 @@ send_back: bool,
 fn getGrade(score: usize, quota: usize) u8 {
     const ratio = util.asf32(score) / util.asf32(quota);
     if (ratio > 1) return 'S';
-    if (ratio > 0.9) return 'A';
-    if (ratio > 0.8) return 'B';
-    if (ratio > 0.7) return 'C';
-    if (ratio > 0.5) return 'D';
+    if (ratio > 0.8) return 'A';
+    if (ratio > 0.7) return 'B';
+    if (ratio > 0.6) return 'C';
+    if (ratio > 0.4) return 'D';
     return 'F';
 }
 
 pub fn init(allocator: std.mem.Allocator, score: usize, quota: usize, deaths: usize) !Self {
     return .{
         .score_quota_string = try std.fmt.allocPrintSentinel(allocator, "SCORE/QUOTA: {}/{}", .{ score, quota }, 0),
-        .grade_string = try std.fmt.allocPrintSentinel(allocator, "GRADE: {c}", .{getGrade(score, quota)}, 0),
+        .grade_string = try std.fmt.allocPrintSentinel(allocator, "LETTER GRADE: {c}", .{getGrade(score, quota)}, 0),
         .deaths_string = try std.fmt.allocPrintSentinel(allocator, "USED: {}", .{deaths + 1}, 0),
         .send_back = false,
     };
