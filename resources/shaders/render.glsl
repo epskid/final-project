@@ -31,6 +31,14 @@ float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
 }
 
+vec4 vignette(vec4 color) {
+    return mix(
+        color,
+        vec4(color.rgb, 0.5),
+        smoothstep(vignette_radius, vignette_radius + blur, distance(fragTexCoord, vec2(0.5, 0.5)))
+    );
+}
+
 void main()
 {
     ivec2 coords = ivec2(fragTexCoord * vec2(screen_width, screen_height));
@@ -64,9 +72,5 @@ void main()
     }
 
     // https://github.com/Apfelstrudel-Technologien/raylibVignette
-    finalColor = mix(
-        finalColor,
-        vec4(finalColor.rgb, 0.5),
-        smoothstep(vignette_radius, vignette_radius + blur, distance(fragTexCoord, vec2(0.5, 0.5)))
-    );
+    finalColor = vignette(finalColor);
 }

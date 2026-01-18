@@ -4,6 +4,7 @@ const Self = @This();
 
 const particle_simulation_timescale = 8;
 
+camera: rl.Camera2D,
 map: *Map,
 level: Level,
 player: Player,
@@ -18,6 +19,12 @@ deaths: usize,
 pub fn init(allocator: std.mem.Allocator) !Self {
     // load the particle simulation
     return .{
+        .camera = .{
+            .offset = .zero(),
+            .target = .zero(),
+            .rotation = 0,
+            .zoom = 1,
+        },
         .map = undefined,
         .level = undefined,
         .player = .init(),
@@ -61,6 +68,8 @@ pub fn spawn(self: *Self, ticker: Ticker) !void {
 }
 
 pub fn tick(self: *Self) !void {
+    self.camera.offset = self.camera.offset.scale(0.1);
+
     self.level.dialog.tick(self);
     if (self.level.dialog.active != null) return;
 
@@ -70,7 +79,7 @@ pub fn tick(self: *Self) !void {
         i -= 1;
         try self.tickers.items[i].tick(self);
         if (self.tickers.items[i].shouldDespawn()) {
-            _ = self.tickers.swapRemove(i); // not a memory leak 'cause all tickers are deactivated on room change
+            _ = self.tickers.swapRemove(i); // not a memory leak 'cause all tickers are freed on room change
         }
     }
 
@@ -90,6 +99,9 @@ pub fn tick(self: *Self) !void {
 }
 
 pub fn draw(self: *const Self) void {
+    if (Settings.screen_shake) rl.beginMode2D(self.camera);
+    defer if (Settings.screen_shake) rl.endMode2D();
+
     // draw the current scene
     if (self.level.active == 0) rl.drawTexture(assets.start, 0, 0, .white) else rl.drawTexture(assets.inside, 0, 0, .white);
 

@@ -38,9 +38,14 @@ pub fn tick(self: *Self, game: *Game) !void {
 
     self.size *= 2; // grow
 
+    const tremor = try game.cloneLocal(Tremor, .init(
+        if (!self.trail) 1 else 0.1,
+        0.1,
+    ));
+    try game.spawn(tremor.ticker());
+
     if (self.shouldDespawn()) {
         // if we've reached our max size, explode nearby particles
-
         const rad: u32 = if (!self.trail) @intFromFloat(self.max_size) else 10;
 
         // fill a circle
@@ -75,10 +80,7 @@ pub fn tick(self: *Self, game: *Game) !void {
                 map_y = if (y_rel < 0) @ceil(map_y) else @floor(map_y);
                 const idx = map_x + consts.width_tiles * map_y;
                 if (idx < game.map.tiles.len) {
-                    if (
-                        (game.map.tiles[@intFromFloat(idx)] != .rock)
-                        and (game.map.tiles[@intFromFloat(idx)] != .grate)
-                    ) game.map.tiles[@intFromFloat(idx)] = null;
+                    if ((game.map.tiles[@intFromFloat(idx)] != .rock) and (game.map.tiles[@intFromFloat(idx)] != .grate)) game.map.tiles[@intFromFloat(idx)] = null;
                 }
             }
         }
@@ -103,9 +105,11 @@ pub fn ticker(self: *Self) Ticker {
 }
 
 const Game = @import("game.zig");
+const Tremor = @import("tremor.zig");
 const Ticker = @import("ticker.zig");
 
 const ps = @import("particle_spec.zig");
+const util = @import("util.zig");
 const consts = @import("consts.zig");
 
 const rl = @import("raylib");

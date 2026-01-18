@@ -21,6 +21,9 @@ pub var show_fps: bool = false;
 // skip all dialogue
 pub var skip_dialogue: bool = false;
 
+// screen shake
+pub var screen_shake: bool = true;
+
 pub fn tick(_: *Self) !void {}
 
 pub fn draw(self: *Self) void {
@@ -51,6 +54,13 @@ pub fn draw(self: *Self) void {
     {
         const message = if (skip_dialogue) "SKIP DIALOGUE [ON]" else "SKIP DIALOGUE [OFF]";
         _ = rg.toggle(rect, message, &skip_dialogue);
+
+        rect.y += 16 + 4;
+    }
+
+    {
+        const message = if (screen_shake) "SCREEN SHAKE [ON]" else "SCREEN SHAKE [OFF]";
+        _ = rg.toggle(rect, message, &screen_shake);
 
         rect.y += 16 + 4;
     }
