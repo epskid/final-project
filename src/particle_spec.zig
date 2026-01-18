@@ -6,6 +6,7 @@ pub const ParticleType = enum(u5) {
     rock,
     packed_sand,
     loose_sand,
+    shifty_sand,
     lava,
     wood,
     burning_wood,
@@ -79,6 +80,7 @@ pub const Command = extern struct {
         flag: enum(u8) {
             place,
             explode,
+            walked,
         },
         x: u12,
         y: u12,

@@ -10,6 +10,7 @@ fn isSolid(tile: ps.ParticleType) bool {
         .wood => true,
         .lava => false,
         .grate => true,
+        .shifty_sand => true,
         else => unreachable,
     };
 }
@@ -38,6 +39,7 @@ pub fn load(path: [:0]const u8) !Self {
                 'r' => .rock,
                 'S' => .loose_sand,
                 's' => .packed_sand,
+                '?' => .shifty_sand,
                 'w' => .wood,
                 'l' => .lava,
                 '#' => .grate,
@@ -104,7 +106,7 @@ pub fn spawn(self: *Self, game: *Game) void {
                         var color = assets.tileset.getColor(@intCast(w + (@as(usize, @intCast(@intFromEnum(tile) - 1)) * consts.tile_size)), @intCast(h));
                         if (color.a == 0) break :blk;
 
-                        if (tile == .loose_sand or tile == .packed_sand) {
+                        if (tile == .loose_sand or tile == .packed_sand or tile == .shifty_sand) {
                             color = color.brightness(util.asf32(rl.getRandomValue(-20, 20)) / 100);
                         }
                         // pack the particle into a GLSL comparible format

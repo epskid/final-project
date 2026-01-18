@@ -26,7 +26,7 @@ So don't die while holding an artifact.
 ...there's thousands of them here...
 1::
 I forgot to mention that there are multiple tiers of artifacts.
-There is an quota you are recommended to achieve.
+There is a quota you are recommended to achieve.
 Achieving it will increase morale and money for our cause.
 More valuable artifacts count more towards it.
 If you don't achieve it, that's okay.

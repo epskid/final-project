@@ -6,10 +6,11 @@
 #define nothing 0
 #define rock 1
 #define packed_sand 2
-#define sand 3
-#define lava 4
-#define wood 5
-#define burning_wood 6
+#define loose_sand 3
+#define shifty_sand 4
+#define lava 5
+#define wood 6
+#define burning_wood 7
 
 #define mask_type 0x1F
 #define shift_color 5
@@ -22,6 +23,7 @@
 
 #define place 0
 #define explode 1
+#define walked 2
 
 struct Command {
     uint func;
@@ -60,10 +62,11 @@ void main() {
             break;
         case explode:
             switch (buffer_a[i] & mask_type) {
+                case shifty_sand:
                 case packed_sand:
                     if (rand(vec2(x, y), 67) < 0.7) {
                         buffer_a[i] &= ~mask_type; // clear mask type
-                        buffer_a[i] |= sand; // loosen packed sand
+                        buffer_a[i] |= loose_sand; // loosen packed sand
                     } else {
                         buffer_a[i] = 0; // clear about 30% of it
                     }
@@ -71,6 +74,14 @@ void main() {
                 case wood:
                     buffer_a[i] = 0xC6C3B5 << shift_color; // nice ashy color
                     buffer_a[i] |= burning_wood; // burn the wood
+                    break;
+            }
+            break;
+        case walked:
+            switch (buffer_a[i] & mask_type) {
+                case shifty_sand:
+                    buffer_a[i] &= ~mask_type;
+                    buffer_a[i] |= loose_sand;
                     break;
             }
             break;

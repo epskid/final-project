@@ -6,10 +6,11 @@
 #define nothing 0
 #define rock 1
 #define packed_sand 2
-#define sand 3
-#define lava 4
-#define wood 5
-#define burning_wood 6
+#define loose_sand 3
+#define shifty_sand 4
+#define lava 5
+#define wood 6
+#define burning_wood 7
 
 #define mask_type 0x1F
 #define shift_color 5
@@ -59,7 +60,7 @@ void main()
             particle_color & 0x0000FF
         ) / 255.0; // map color to float
 
-        if (type == sand) {
+        if (type == loose_sand) {
             // overlay some noise to differentiate loose and packed sand
             rgb *= 0.75 + (0.25 * rand(vec2(coords), time));
         }

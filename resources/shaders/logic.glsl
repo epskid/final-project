@@ -6,10 +6,11 @@
 #define nothing 0
 #define rock 1
 #define packed_sand 2
-#define sand 3
-#define lava 4
-#define wood 5
-#define burning_wood 6
+#define loose_sand 3
+#define shifty_sand 4
+#define lava 5
+#define wood 6
+#define burning_wood 7
 
 #define mask_type 0x1F
 
@@ -23,7 +24,10 @@ layout(std430, binding = 1) buffer buffer_a_layout {
 
 layout(location = 0) uniform uint time;
 
-#define get(x, y) buffer_a[(x) + screen_width * (y)]
+#define get(x, y) (((x) >= (screen_width - 1)) ? 0 : \
+    (((x) < 0) ? 0 : \
+     (((y) >= (screen_height - 1)) ? 0 : \
+      ((y < 0) ? 0 : buffer_a[(x) + screen_width * (y)]))))
 #define set(x, y, value) buffer_a[(x) + screen_width * (y)] = value
 
 // main update function for sand; can move into empty space or lava
@@ -60,8 +64,8 @@ float rand(vec2 xy, float seed) {
 }
 
 void main() {
-    uint x0 = gl_GlobalInvocationID.x;
-    uint y0 = gl_GlobalInvocationID.y;
+    int x0 = int(gl_GlobalInvocationID.x);
+    int y0 = int(gl_GlobalInvocationID.y);
     uint current = get(x0, y0); // see particle spec for bit layout
     uint type = current & mask_type;
 
@@ -81,7 +85,7 @@ void main() {
     int bias = (int(time % 2) * 2) - 1; // switch falling direcion each frame so piles aren't lopsided
     int random = (int(round(r)) * 2) - 1;
     switch (type) {
-        case sand:
+        case loose_sand:
             fallTo(x0, y0 + 1); // straight down
             fallTo(x0 + bias, y0 + 1); // down left/right
             fallTo(x0 - bias, y0 + 1); // down opposite of above
@@ -113,6 +117,14 @@ void main() {
                 flowTo(x0 + random, y0); // down left/right
                 flowTo(x0 - random, y0); // down opposite of above
             }
+            break;
+        case shifty_sand:
+            if (
+                ((get(x0 + 1, y0) & mask_type) == loose_sand)
+                || ((get(x0 - 1, y0) & mask_type) == loose_sand)
+                || ((get(x0, y0 + 1) & mask_type) == loose_sand)
+                || ((get(x0, y0 - 1) & mask_type) == loose_sand)
+            ) set(x0, y0, (current & ~mask_type) | loose_sand);
             break;
     }
 }
