@@ -5,17 +5,15 @@ const Self = @This();
 fn isSolid(tile: ps.ParticleType) bool {
     return switch (tile) {
         .rock => true,
-        .loose_sand => false,
         .packed_sand => true,
         .wood => true,
-        .lava => false,
         .grate => true,
         .shifty_sand => true,
-        else => unreachable,
+        else => false,
     };
 }
 
-tiles: [consts.width_tiles * consts.height_tiles]?ps.ParticleType,
+tiles: [consts.width_tiles * consts.height_tiles]ps.ParticleType,
 artifact: ?Artifact = null,
 particles: ?[]ps.Particle.GLSLRepr = null,
 tractor_beam: ?TractorBeam = null,
@@ -25,7 +23,7 @@ pub fn load(path: [:0]const u8) !Self {
     var self: Self = .{
         .tiles = undefined,
     };
-    @memset(&self.tiles, null);
+    @memset(&self.tiles, .none);
 
     const text = try rl.loadFileData(path);
     defer rl.unloadFileData(text);
@@ -95,14 +93,14 @@ pub fn spawn(self: *Self, game: *Game) void {
         var y: usize = 0;
 
         // iterate every tile
-        for (self.tiles) |maybe_tile| {
+        for (self.tiles) |tile| {
             // iterate every pixel in the tile
             for (0..consts.tile_size) |w| {
                 for (0..consts.tile_size) |h| {
                     var place: u32 = 0;
 
                     // sample the pixel color from the tileset
-                    if (maybe_tile) |tile| blk: {
+                    if (tile != .none) blk: {
                         var color = assets.tileset.getColor(@intCast(w + (@as(usize, @intCast(@intFromEnum(tile) - 1)) * consts.tile_size)), @intCast(h));
                         if (color.a == 0) break :blk;
 
@@ -143,6 +141,28 @@ pub fn spawn(self: *Self, game: *Game) void {
     game.simulation.compute.writeCommands();
 }
 
+pub fn loadTiles(self: *Self, game: *const Game) void {
+    @setRuntimeSafety(false);
+    var counters: [@typeInfo(ps.ParticleType).@"enum".fields.len]u8 = undefined;
+    for (0..self.tiles.len) |tile_i| {
+        @memset(&counters, 0);
+        const x_start = (tile_i % consts.width_tiles) * consts.tile_size;
+        const y_start = (tile_i / consts.width_tiles) * consts.tile_size;
+        for (x_start..(x_start + consts.tile_size)) |x| {
+            for (y_start..(y_start + consts.tile_size)) |y| {
+                const particle = game.particles[x + consts.width * y];
+                counters[particle.type] +|= 1;
+            }
+        }
+        const max_idx = std.mem.indexOfMax(u8, counters[1..]);
+        if (counters[max_idx + 1] > 127) {
+            self.tiles[tile_i] = @enumFromInt(max_idx + 1);
+        } else {
+            self.tiles[tile_i] = .none;
+        }
+    }
+}
+
 pub fn saveParticles(self: *Self, game: *Game) void {
     // save the particles if we have the memory for it
     const particles = game.global_allocator.alloc(ps.Particle.GLSLRepr, consts.width * consts.height) catch |err| {
@@ -155,17 +175,14 @@ pub fn saveParticles(self: *Self, game: *Game) void {
 
 pub fn isColliding(self: *const Self, hitbox: rl.Rectangle) bool {
     // iterate every tile
-    for (0.., self.tiles) |i, maybe_tile| {
-        if (maybe_tile) |tile| {
-            // if there's a solid tile, check if it's colliding with the provided hitbox
-            if (isSolid(tile)) {
-                if (rl.checkCollisionRecs(hitbox, .init(
-                    @floatFromInt((i % consts.width_tiles) * consts.tile_size),
-                    @floatFromInt((i / consts.width_tiles) * consts.tile_size),
-                    consts.tile_size,
-                    consts.tile_size,
-                ))) return true;
-            }
+    for (0.., self.tiles) |i, tile| {
+        if (isSolid(tile)) {
+            if (rl.checkCollisionRecs(hitbox, .init(
+                @floatFromInt((i % consts.width_tiles) * consts.tile_size),
+                @floatFromInt((i / consts.width_tiles) * consts.tile_size),
+                consts.tile_size,
+                consts.tile_size,
+            ))) return true;
         }
     }
 

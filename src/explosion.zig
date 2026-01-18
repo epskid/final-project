@@ -73,18 +73,6 @@ pub fn tick(self: *Self, game: *Game) !void {
                     },
                     .parameter = 0,
                 });
-
-                if (!self.trail) {
-                    // update map
-                    var map_x: f32 = @as(f32, @floatFromInt(x)) / consts.tile_size;
-                    map_x = if (x_rel < 0) @ceil(map_x) else @floor(map_x);
-                    var map_y: f32 = @as(f32, @floatFromInt(y)) / 16;
-                    map_y = if (y_rel < 0) @ceil(map_y) else @floor(map_y);
-                    const idx = map_x + consts.width_tiles * map_y;
-                    if (idx < game.map.tiles.len) {
-                        if ((game.map.tiles[@intFromFloat(idx)] != .rock) and (game.map.tiles[@intFromFloat(idx)] != .grate)) game.map.tiles[@intFromFloat(idx)] = null;
-                    }
-                }
             }
         }
 

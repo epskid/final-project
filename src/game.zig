@@ -68,7 +68,7 @@ pub fn spawn(self: *Self, ticker: Ticker) !void {
 }
 
 pub fn tick(self: *Self) !void {
-    self.camera.offset = self.camera.offset.scale(0.1);
+    self.camera.offset = .zero();
 
     self.level.dialog.tick(self);
     if (self.level.dialog.active != null) return;
@@ -94,6 +94,8 @@ pub fn tick(self: *Self) !void {
     }
 
     self.simulation.compute.readA(self.particles);
+
+    self.map.loadTiles(self);
 
     try self.player.tick(self);
 }
