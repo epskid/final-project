@@ -4,6 +4,7 @@ const Self = @This();
 
 const particle_simulation_timescale = 8;
 
+index: usize,
 camera: rl.Camera2D,
 map: *Map,
 level: Level,
@@ -21,6 +22,7 @@ deaths: usize,
 pub fn init(allocator: std.mem.Allocator) !Self {
     // load the particle simulation
     return .{
+        .index = 0,
         .camera = .{
             .offset = .zero(),
             .target = .zero(),
@@ -47,6 +49,7 @@ pub fn init(allocator: std.mem.Allocator) !Self {
 }
 
 pub fn loadLevel(self: *Self, level: usize) !void {
+    self.index = level;
     const level_path = try std.fmt.allocPrintSentinel(
         self.global_allocator,
         "resources/levels/{}",
@@ -152,6 +155,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
             const result = blk: {
                 const stats = Stats.init(
                     self.global_allocator,
+                    self.index,
                     self.score,
                     self.level.quota,
                     self.deaths,

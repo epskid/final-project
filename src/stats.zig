@@ -1,5 +1,6 @@
 const Self = @This();
 
+tip_string: [:0]const u8,
 score_quota_string: [:0]u8,
 grade_string: [:0]u8,
 deaths_string: [:0]u8,
@@ -15,10 +16,20 @@ fn getGrade(score: usize, quota: usize) u8 {
     return 'F';
 }
 
-pub fn init(allocator: std.mem.Allocator, score: usize, quota: usize, deaths: usize) !Self {
+pub fn init(
+    allocator: std.mem.Allocator,
+    index: usize,
+    score: usize,
+    quota: usize,
+    deaths: usize,
+) !Self {
+    const grade = getGrade(score, quota);
+    if (grade != 'F') Menu.unlocked = index + 1;
+
     return .{
+        .tip_string = if (grade == 'F') "GET A NON 'F' GRADE TO UNLOCK THE NEXT LEVEL" else "THE NEXT LEVEL IS AVAILABLE",
         .score_quota_string = try std.fmt.allocPrintSentinel(allocator, "SCORE/QUOTA: {}/{}", .{ score, quota }, 0),
-        .grade_string = try std.fmt.allocPrintSentinel(allocator, "LETTER GRADE: {c}", .{getGrade(score, quota)}, 0),
+        .grade_string = try std.fmt.allocPrintSentinel(allocator, "LETTER GRADE: {c}", .{grade}, 0),
         .deaths_string = try std.fmt.allocPrintSentinel(allocator, "USED: {}", .{deaths + 1}, 0),
         .send_back = false,
     };
@@ -37,6 +48,7 @@ pub fn draw(self: *Self) void {
 
     const sq_width = util.measureText(self.score_quota_string, font_size);
     const g_width = util.measureText(self.grade_string, font_size);
+    const t_width = util.measureText(self.tip_string, font_size / 2);
     const d_width = util.measureText(self.deaths_string, font_size);
 
     util.drawText(
@@ -52,6 +64,13 @@ pub fn draw(self: *Self) void {
         consts.height / 2 - font_size / 2,
         font_size,
         .white,
+    );
+    util.drawText(
+        self.tip_string,
+        consts.width / 2 - @divFloor(t_width, 2),
+        consts.height / 2 + font_size / 2,
+        font_size / 2,
+        .gray,
     );
     util.drawText(
         self.deaths_string,
@@ -84,6 +103,8 @@ pub fn deinit(self: *Self, allocator: std.mem.Allocator) void {
     allocator.free(self.grade_string);
     allocator.free(self.deaths_string);
 }
+
+const Menu = @import("menu.zig");
 
 const s = @import("state.zig");
 const util = @import("util.zig");

@@ -37,8 +37,8 @@ pub fn draw(self: *Self) void {
     if (self.level_select) self.drawLevelSelect() else self.drawMain();
 }
 
+pub var unlocked: usize = 0;
 const levels = [_][:0]const u8{ "PILOT", "TUNNEL", "SHIFTY" };
-const unlocked = 0;
 pub fn drawLevelSelect(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
