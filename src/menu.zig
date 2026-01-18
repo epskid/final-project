@@ -66,6 +66,15 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 
     {
+        if (util.button(rect, "SHIFTY")) {
+            self.selected_level = 2;
+            self.next_state = .playing;
+        }
+
+        rect.y += 16 + 4;
+    }
+
+    {
         if (util.button(rect, "BACK")) {
             self.level_select = false;
         }
