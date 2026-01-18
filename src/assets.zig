@@ -1,5 +1,7 @@
 // global asset loader
 
+pub var font: rl.Font = undefined;
+
 pub var player: rl.Texture2D = undefined;
 pub var gun: rl.Texture2D = undefined;
 pub var artifacts: rl.Texture2D = undefined;
@@ -19,6 +21,10 @@ pub var menu_music: rl.Music = undefined;
 pub var main_music: rl.Music = undefined;
 
 pub fn load() !void {
+    font = try rl.loadFontEx("resources/PixelIntv.otf", 12, null);
+    rg.setFont(font);
+    rg.setStyle(.default, .{ .default = .text_size }, 12);
+
     player = try util.texFromImg("resources/sprites/player.png");
     gun = try util.texFromImg("resources/sprites/gun.png");
     artifacts = try util.texFromImg("resources/sprites/artifacts.png");
@@ -40,6 +46,8 @@ pub fn load() !void {
 }
 
 pub fn unload() void {
+    rl.unloadFont(font);
+
     rl.unloadTexture(player);
     rl.unloadTexture(gun);
     rl.unloadTexture(artifacts);
@@ -56,6 +64,9 @@ pub fn unload() void {
     rl.unloadMusicStream(main_music);
 }
 
+const Player = @import("player.zig");
+
 const util = @import("util.zig");
 
 const rl = @import("raylib");
+const rg = @import("raygui");

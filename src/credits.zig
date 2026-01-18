@@ -14,8 +14,9 @@ pub fn tick(_: *Self) !void {}
 
 pub fn draw(self: *Self) void {
     rl.drawTexture(assets.inside, 0, 0, .white);
-    rl.drawText(credits, 16, 16, 16, .white);
-    if (util.button(.init(16, consts.height - 16 - 4, 256, 16), "BACK TO MENU")) {
+    util.drawText("CREDITS", 16, 16, 24, .white);
+    util.drawText(credits, 16, 16 + 16 + 12, 12, .white);
+    if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK")) {
         self.send_back = true;
     }
 }

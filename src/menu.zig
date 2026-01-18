@@ -34,45 +34,29 @@ pub fn draw(self: *Self) void {
         .white,
     );
 
-    if (self.level_select) self.drawLevelSelect()
-    else self.drawMain();
+    if (self.level_select) self.drawLevelSelect() else self.drawMain();
 }
 
+const levels = [_][:0]const u8{ "PILOT", "TUNNEL", "SHIFTY" };
+const unlocked = 0;
 pub fn drawLevelSelect(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    {
-        _ = rg.label(rect, "LEVEL SELECT");
+    util.drawText("FINAL_PROJECT/MISSION_SELECT", 16, 16, 24, .white);
+    rect.y += 24 + 4;
 
-        rect.y += 16 + 4;
-    }
+    for (0.., levels) |i, name| {
+        if (i > unlocked) rg.disable();
 
-    {
-        if (util.button(rect, "PILOT")) {
-            self.selected_level = 0;
+        if (util.button(rect, name)) {
+            self.selected_level = i;
             self.next_state = .playing;
         }
 
         rect.y += 16 + 4;
     }
 
-    {
-        if (util.button(rect, "TUNNEL")) {
-            self.selected_level = 1;
-            self.next_state = .playing;
-        }
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        if (util.button(rect, "SHIFTY")) {
-            self.selected_level = 2;
-            self.next_state = .playing;
-        }
-
-        rect.y += 16 + 4;
-    }
+    rg.enable();
 
     {
         if (util.button(rect, "BACK")) {
@@ -86,11 +70,8 @@ pub fn drawLevelSelect(self: *Self) void {
 pub fn drawMain(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    {
-        _ = rg.label(rect, "FINAL PROJECT");
-
-        rect.y += 16 + 4;
-    }
+    util.drawText("FINAL_PROJECT", 16, 16, 24, .white);
+    rect.y += 24 + 4;
 
     {
         if (util.button(rect, "PLAY")) {

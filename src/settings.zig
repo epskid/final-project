@@ -27,15 +27,12 @@ pub var screen_shake: bool = true;
 pub fn tick(_: *Self) !void {}
 
 pub fn draw(self: *Self) void {
-    rl.clearBackground(.beige);
+    rl.drawTexture(assets.inside, 0, 0, .white);
 
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    {
-        _ = rg.label(rect, "SETTINGS");
-
-        rect.y += 16 + 4;
-    }
+    util.drawText("SETTINGS", 16, 16, 24, .white);
+    rect.y += 24 + 4;
 
     {
         const message = if (fractional_scaling) "FRACTIONAL SCALING [ON]" else "FRACTIONAL SCALING [OFF]";
@@ -81,12 +78,8 @@ pub fn draw(self: *Self) void {
         rect.y += 16 + 4;
     }
 
-    {
-        if (util.button(rect, "BACK")) {
-            self.should_return = true;
-        }
-
-        rect.y += 16 + 4;
+    if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK")) {
+        self.should_return = true;
     }
 }
 

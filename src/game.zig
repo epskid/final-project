@@ -12,7 +12,9 @@ tickers: std.ArrayList(Ticker),
 global_allocator: std.mem.Allocator,
 map_arena: std.heap.ArenaAllocator,
 simulation: ps.Simulation,
+hash_before: [consts.height_tiles]u32,
 particles: []ps.Particle.GLSLRepr,
+hash_after: [consts.height_tiles]u32,
 score: usize,
 deaths: usize,
 
@@ -36,7 +38,9 @@ pub fn init(allocator: std.mem.Allocator) !Self {
             "resources/shaders/transfer.glsl",
             "resources/shaders/render.glsl",
         ),
+        .hash_before = undefined,
         .particles = try allocator.alloc(ps.Particle.GLSLRepr, consts.width * consts.height),
+        .hash_after = undefined,
         .score = 0,
         .deaths = 0,
     };
@@ -123,7 +127,7 @@ pub fn draw(self: *const Self) void {
 
     const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "QUOTA: {}/{}", .{ self.score, self.level.quota }, 0) catch unreachable;
     defer self.global_allocator.free(score_str);
-    rl.drawText(score_str, 32, 32, 16, .white);
+    util.drawText(score_str, 32, 32, 24, .white);
 
     self.level.dialog.draw(self.global_allocator) catch unreachable;
 }

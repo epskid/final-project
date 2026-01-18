@@ -104,8 +104,12 @@ pub fn spawn(self: *Self, game: *Game) void {
                         var color = assets.tileset.getColor(@intCast(w + (@as(usize, @intCast(@intFromEnum(tile) - 1)) * consts.tile_size)), @intCast(h));
                         if (color.a == 0) break :blk;
 
-                        if (tile == .loose_sand or tile == .packed_sand or tile == .shifty_sand) {
+                        if (tile == .loose_sand or tile == .packed_sand) {
                             color = color.brightness(util.asf32(rl.getRandomValue(-20, 20)) / 100);
+                        }
+                        // more variation for shifty sand
+                        if (tile == .shifty_sand) {
+                            color = color.brightness(util.asf32(rl.getRandomValue(-20, 50)) / 100);
                         }
                         // pack the particle into a GLSL comparible format
                         place = @bitCast(ps.Particle.pack(.{

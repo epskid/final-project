@@ -59,7 +59,7 @@ pub fn tick(self: *Self, game: *Game) void {
     }
 }
 
-const size = 16;
+const size = 12;
 pub fn draw(self: *const Self, allocator: std.mem.Allocator) !void {
     if (settings.skip_dialogue) return;
 
@@ -67,8 +67,8 @@ pub fn draw(self: *const Self, allocator: std.mem.Allocator) !void {
         var line = self.dialog.get(idx).?;
         const line_z = try allocator.dupeZ(u8, line.lines.peek().?[0..self.talk]);
         defer allocator.free(line_z);
-        const width = rl.measureText(line_z, 16);
-        rl.drawText(
+        const width = util.measureText(line_z, 16);
+        util.drawText(
             line_z,
             consts.width / 2 - @divFloor(width, 2),
             consts.height / 2 - size / 2,
@@ -85,6 +85,7 @@ pub fn unload(self: *Self) void {
 
 const Game = @import("game.zig");
 
+const util = @import("util.zig");
 const consts = @import("consts.zig");
 const assets = @import("assets.zig");
 const settings = @import("settings.zig");

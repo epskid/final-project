@@ -16,7 +16,7 @@
 
 #define tile_size 16
 
-layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+layout (local_size_x = tile_size, local_size_y = tile_size, local_size_z = 1) in;
 
 layout(std430, binding = 1) buffer buffer_a_layout {
     uint buffer_a[];
@@ -28,7 +28,9 @@ layout(location = 0) uniform uint time;
     (((x) < 0) ? 0 : \
      (((y) >= (screen_height - 1)) ? 0 : \
       ((y < 0) ? 0 : buffer_a[(x) + screen_width * (y)]))))
-#define set(x, y, value) buffer_a[(x) + screen_width * (y)] = value
+#define set(x, y, value) if ( \
+    ((x) >= 0) && ((x) < (screen_width - 1)) \
+    && ((y) >= 0) && ((y) < (screen_height - 1))) buffer_a[(x) + screen_width * (y)] = value
 
 // main update function for sand; can move into empty space or lava
 #define fallTo(x, y) if ((y >= (screen_height - 1)) || (((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava))) { \
@@ -63,6 +65,7 @@ float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
 }
 
+const uint block_size = screen_width * tile_size;
 void main() {
     int x0 = int(gl_GlobalInvocationID.x);
     int y0 = int(gl_GlobalInvocationID.y);

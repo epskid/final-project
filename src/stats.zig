@@ -35,25 +35,25 @@ const font_size = 24;
 pub fn draw(self: *Self) void {
     rl.drawTexture(assets.inside, 0, 0, .white);
 
-    const sq_width = rl.measureText(self.score_quota_string, font_size);
-    const g_width = rl.measureText(self.grade_string, font_size);
-    const d_width = rl.measureText(self.deaths_string, font_size);
+    const sq_width = util.measureText(self.score_quota_string, font_size);
+    const g_width = util.measureText(self.grade_string, font_size);
+    const d_width = util.measureText(self.deaths_string, font_size);
 
-    rl.drawText(
+    util.drawText(
         self.score_quota_string,
         consts.width / 2 - @divFloor(sq_width, 2),
         consts.height / 2 - (3 * font_size) / 2,
         font_size,
         .white,
     );
-    rl.drawText(
+    util.drawText(
         self.grade_string,
         consts.width / 2 - @divFloor(g_width, 2),
         consts.height / 2 - font_size / 2,
         font_size,
         .white,
     );
-    rl.drawText(
+    util.drawText(
         self.deaths_string,
         consts.width / 2 - @divFloor(d_width, 2),
         consts.height / 2 + (3 * font_size) / 2,
@@ -61,7 +61,7 @@ pub fn draw(self: *Self) void {
         .white,
     );
 
-    if (util.button(.init(16, 16, 256, 16), "BACK TO MENU")) {
+    if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK TO MENU")) {
         self.send_back = true;
     }
 }

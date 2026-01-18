@@ -8,7 +8,7 @@ const walk_speed = 300;
 const jump_strength = consts.gravity / 4;
 const suffocation_time = 3; // (seconds) time to suffocate
 const sand_speed = 0.4; // sand speed multiplier
-const tractor_beam_speed = 0.8; // tractor beam speed multiplier
+const tractor_beam_speed = 0.7; // tractor beam speed multiplier
 
 suffocating: bool = false,
 suffocation: ?f32 = null,
@@ -193,8 +193,8 @@ pub fn tick(self: *Self, game: *Game) !void {
     if (!game.level.advance(game)) {
         const old_pos = self.position;
         self.position = self.position.clamp(
-            .init(-12, -12),
-            .init(consts.width - 4, consts.height - 4),
+            .init(-0.75 * consts.tile_size, -0.75 * consts.tile_size),
+            .init(consts.width - 0.25 * consts.tile_size, consts.height - 0.25 * consts.tile_size),
         );
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;
@@ -202,7 +202,7 @@ pub fn tick(self: *Self, game: *Game) !void {
         if (old_pos.y != self.position.y) {
             self.velocity.y = 0;
 
-            if (self.position.y == (consts.height)) {
+            if (self.position.y > 0) {
                 self.die();
                 return;
             }
@@ -233,6 +233,21 @@ pub fn tick(self: *Self, game: *Game) !void {
         // cool down the gun
         self.gun_cooldown = @max(0, self.gun_cooldown - dt);
     }
+
+    // tell the compute shader if we're standing in one place
+    if (self.grounded and @abs(self.velocity.x) < 0.1) {
+        if ((self.position.x >= (consts.tile_size / 2)) and (self.position.x < (consts.width - consts.tile_size / 2))) {
+            game.simulation.compute.pushCommand(.{
+                .func = .{
+                    .flag = .walked,
+                    .x = @intFromFloat(self.position.x + (consts.tile_size / 2)),
+                    .y = @intFromFloat(self.position.y + consts.tile_size + 1),
+                },
+                .parameter = 0,
+            });
+            game.simulation.compute.writeCommands();
+        }
+    }
 }
 
 pub fn die(self: *Self) void {
@@ -253,8 +268,8 @@ pub fn spawnAtTractor(self: *Self, game: *Game) void {
 pub fn draw(self: *const Self) void {
     if (self.died) {
         const text = "YOU DIED -- PRESS ANY KEY TO CONTINUE";
-        const size = 16;
-        const width = rl.measureText(text, size);
+        const size = 12;
+        const width = util.measureText(text, size);
         const pad = 4;
         rl.drawRectangle(
             consts.width / 2 - @divFloor(width, 2) - pad,
@@ -263,7 +278,7 @@ pub fn draw(self: *const Self) void {
             size + pad * 2,
             consts.palette.x3B2027,
         );
-        rl.drawText(
+        util.drawText(
             text,
             consts.width / 2 - @divFloor(width, 2),
             consts.height / 2 - size / 2,

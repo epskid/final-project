@@ -1,6 +1,7 @@
 Palette: Rosy-42 by PineTreePizza (https://twitter.com/PineTreePizza)
 Art: I (with self-compiled Aseprite)
 Music: Me (using LMMS)
-SFX: Various LMMS Sounds/Presets
+SFX: Various Sounds made with LMMS and Preset LMMS Sounds
+Font: Pixel Intv by Pixel Sagas (www.pixelsagas.com)
 Programming: Myself (and the Raylib project for examples)
 Player: You (thanks for playing)

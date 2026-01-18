@@ -22,6 +22,9 @@ pub fn main() !void {
     rl.setExitKey(.null);
     rl.setTargetFPS(60);
 
+    // load raygui style
+    rg.loadStyle("resources/style.rgs");
+
     // raylib audio
     rl.initAudioDevice();
     defer rl.closeAudioDevice();
@@ -113,4 +116,5 @@ const consts = @import("consts.zig");
 const assets = @import("assets.zig");
 
 const rl = @import("raylib");
+const rg = @import("raygui");
 const std = @import("std");

@@ -98,7 +98,7 @@ pub fn HeadlessComputeShader(
 
             rl.gl.rlDisableShader();
 
-            self.time = (self.time + 1) % 677;
+            self.time = (self.time + 1) % 6700;
         }
 
         pub fn readA(self: *const Self, dest: []Logic) void {
@@ -108,11 +108,9 @@ pub fn HeadlessComputeShader(
             rl.gl.rlReadShaderBuffer(self.buffer_a, dest.ptr, logic_buffer_length * @sizeOf(Logic), 0);
         }
 
-        pub fn readB(self: *const Self, dest: []u32) void {
-            // read SSBO b out into a provided buffer
-
-            std.debug.assert(dest.len == logic_buffer_length);
-            rl.gl.rlReadShaderBuffer(self.buffer_b, dest.ptr, logic_buffer_length * @sizeOf(u32), 0);
+        pub fn readB(self: *const Self, comptime T: type, dest: []T) void {
+            // read some of SSBO b out into a provided buffer
+            rl.gl.rlReadShaderBuffer(self.buffer_b, dest.ptr, @intCast(dest.len * @sizeOf(T)), 0);
         }
 
         pub fn unload(self: *const Self) void {

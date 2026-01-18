@@ -14,52 +14,26 @@ pub fn init(previous_state: ?s.State) Self {
 pub fn tick(_: *Self) !void {}
 
 pub fn draw(self: *Self) void {
-    rl.clearBackground(.beige);
+    rl.drawTexture(assets.inside, 0, 0, .white);
 
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    {
-        _ = rg.label(rect, "CONTROLS");
+    util.drawText("CONTROLS", 16, 16, 24, .white);
+    rect.y += 24 + 4;
 
-        rect.y += 16 + 4;
-    }
+    _ = rg.label(rect, "ANY KEY - ADVANCE DIALOGUE");
+    rect.y += 16;
+    _ = rg.label(rect, "A/D - MOVE LEFT/RIGHT");
+    rect.y += 16;
+    _ = rg.label(rect, "SPACE - JUMP");
+    rect.y += 16;
+    _ = rg.label(rect, "MOUSE MOVE - AIM");
+    rect.y += 16;
+    _ = rg.label(rect, "LEFT MOUSE - FIRE");
+    rect.y += 16;
 
-    {
-        _ = rg.label(rect, "ANY KEY - ADVANCE DIALOGUE");
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        _ = rg.label(rect, "A/D - MOVE LEFT/RIGHT");
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        _ = rg.label(rect, "SPACE - JUMP");
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        _ = rg.label(rect, "MOUSE MOVE - AIM");
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        _ = rg.label(rect, "LEFT MOUSE - FIRE");
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        if (util.button(rect, "BACK")) {
-            self.should_return = true;
-        }
-
-        rect.y += 16 + 4;
+    if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK")) {
+        self.should_return = true;
     }
 }
 
@@ -87,6 +61,7 @@ pub fn deinit(self: *Self, allocator: std.mem.Allocator) void {
 const s = @import("state.zig");
 const util = @import("util.zig");
 const consts = @import("consts.zig");
+const assets = @import("assets.zig");
 
 const rl = @import("raylib");
 const rg = @import("raygui");
