@@ -32,7 +32,8 @@ pub fn init() Self {
     };
 }
 
-const suffocating_filter = util.lowpassFilter(1000);
+const SuffocatingFilter = util.LowpassFilter(1000);
+
 pub fn tick(self: *Self, game: *Game) !void {
     if (self.died) {
         rl.stopMusicStream(assets.main_music);
@@ -152,7 +153,11 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
 
     // add filters
-    if (!prev_suffoc and self.suffocating) rl.attachAudioStreamProcessor(assets.main_music.stream, suffocating_filter) else if (!self.suffocating) rl.detachAudioStreamProcessor(assets.main_music.stream, suffocating_filter);
+    if (!prev_suffoc and self.suffocating) {
+        rl.attachAudioStreamProcessor(assets.main_music.stream, SuffocatingFilter.process);
+    } else if (!self.suffocating) {
+        rl.detachAudioStreamProcessor(assets.main_music.stream, SuffocatingFilter.process);
+    }
 
     // get slowed down in sand
     if (self.suffocating) self.velocity = self.velocity.scale(sand_speed);

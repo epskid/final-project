@@ -106,28 +106,27 @@ pub inline fn button(bounds: rl.Rectangle, text: [:0]const u8) bool {
     return result;
 }
 
-pub inline fn lowpassFilter(frequency_hz: f32) rl.AudioCallback {
+pub fn LowpassFilter(comptime frequency_hz: f32) type {
     return struct {
         var low: [2]f32 = [_]f32 { 0.0, 0.0 };
         var cutoff: f32 = frequency_hz / 44100;
 
         // https://github.com/raysan5/raylib/blob/master/examples/audio/audio_stream_effects.c
-        fn process(buffer_maybe: ?*anyopaque, len: c_uint) callconv(.c) void {
-            if (buffer_maybe) |buffer| {
-                const k = cutoff / (cutoff + 0.1591549431); // RC filter formula
-                var buffer_data: [*]f32 = @ptrCast(@alignCast(buffer));
-                for (0..(len * 2)) |i| {
-                    const l = buffer_data[i];
-                    const r = buffer_data[i + 1];
+        pub fn process(buffer: ?*anyopaque, len: c_uint) callconv(.c) void {
+            var buffer_data: [*]f32 = @alignCast(@ptrCast(buffer orelse return));
 
-                    low[0] += k * (l - low[0]);
-                    low[1] += k * (r - low[1]);
-                    buffer_data[i] = low[0];
-                    buffer_data[i + 1] = low[1];
-                }
+            const k = cutoff / (cutoff + 0.1591549431); // RC filter formula
+            for (0..(len * 2)) |i| {
+                const l = buffer_data[i];
+                const r = buffer_data[i + 1];
+
+                low[0] += k * (l - low[0]);
+                low[1] += k * (r - low[1]);
+                buffer_data[i] = low[0];
+                buffer_data[i + 1] = low[1];
             }
         }
-    }.process;
+    };
 }
 
 const Map = @import("map.zig");
