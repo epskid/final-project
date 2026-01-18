@@ -106,6 +106,14 @@ pub inline fn button(bounds: rl.Rectangle, text: [:0]const u8) bool {
     return result;
 }
 
+pub fn drawText(text: [:0]const u8, x: i32, y: i32, size: i32, color: rl.Color) void {
+    rl.drawTextEx(assets.font, text, .init(asf32(x), asf32(y)), asf32(size), 1, color);
+}
+
+pub fn measureText(text: [:0]const u8, size: i32) i32 {
+    return @intFromFloat(rl.measureTextEx(assets.font, text, asf32(size), 1).x);
+}
+
 pub fn LowpassFilter(comptime frequency_hz: f32) type {
     return struct {
         var low = [_]f32{ 0.0, 0.0 };
@@ -116,7 +124,9 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
             var buffer_data: [*]f32 = @ptrCast(@alignCast(buffer orelse return));
 
             const k = cutoff / (cutoff + 0.1591549431); // RC filter formula
-            for (0..(len * 2)) |i| {
+            for (0..len) |i_half| {
+                const i = i_half * 2;
+
                 const l = buffer_data[i];
                 const r = buffer_data[i + 1];
 
@@ -127,14 +137,6 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
             }
         }
     };
-}
-
-pub fn drawText(text: [:0]const u8, x: i32, y: i32, size: i32, color: rl.Color) void {
-    rl.drawTextEx(assets.font, text, .init(asf32(x), asf32(y)), asf32(size), 1, color);
-}
-
-pub fn measureText(text: [:0]const u8, size: i32) i32 {
-    return @intFromFloat(rl.measureTextEx(assets.font, text, asf32(size), 1).x);
 }
 
 const Map = @import("map.zig");

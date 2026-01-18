@@ -32,7 +32,7 @@ pub fn init() Self {
     };
 }
 
-const SuffocatingFilter = util.LowpassFilter(1000);
+const SuffocatingFilter = util.LowpassFilter(750);
 
 pub fn tick(self: *Self, game: *Game) !void {
     if (self.died) {
