@@ -14,6 +14,7 @@ pub fn init(
     position: rl.Vector2,
     velocity: rl.Vector2,
 ) Self {
+    rl.playSound(assets.shoot_sound);
     return .{
         .initial_position = position,
         .position = position,

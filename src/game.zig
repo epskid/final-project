@@ -127,17 +127,24 @@ pub fn draw(self: *const Self) void {
 }
 
 pub fn getNewState(self: *const Self) ?s.NewStateInfo {
-    if (rl.isKeyDown(.escape)) return .{
-        .new_state = .{
-            .needs_init = .settings,
-        },
-        .deinit = false,
+    if (rl.isKeyDown(.escape)) {
+        rl.pauseMusicStream(assets.main_music);
+        rl.updateMusicStream(assets.main_music);
+        return .{
+            .new_state = .{
+                .needs_init = .settings,
+            },
+            .deinit = false,
+        };
     } else if (self.map.tractor_beam) |tb| {
         if (
             (self.player.position.y < 0)
             and (self.player.position.x > (tb.bottom.x - TractorBeam.width))
             and (self.player.position.x < (tb.bottom.x + TractorBeam.width))
         ) {
+            rl.stopMusicStream(assets.main_music);
+            rl.updateMusicStream(assets.main_music);
+
             const result = blk: {
                 const stats = Stats.init(
                     self.global_allocator,

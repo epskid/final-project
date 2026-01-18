@@ -24,7 +24,12 @@ pub fn init(allocator: std.mem.Allocator, score: usize, quota: usize, deaths: us
     };
 }
 
-pub fn tick(_: *Self) !void {}
+pub fn tick(_: *Self) !void {
+    if (!rl.isMusicStreamPlaying(assets.menu_music)) {
+        rl.playMusicStream(assets.menu_music);
+    }
+    rl.updateMusicStream(assets.menu_music);
+}
 
 const font_size = 24;
 pub fn draw(self: *Self) void {
