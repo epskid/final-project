@@ -21,5 +21,5 @@ case $PLATFORM in
 esac
 
 cp "zig-out/bin/$EXE" $EXE
-zip -r "dist-$PLATFORM-$RELEASE.zip" resources $EXE
+zip -r "dist-$PLATFORM.zip" resources $EXE
 rm $EXE

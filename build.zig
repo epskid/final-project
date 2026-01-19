@@ -13,12 +13,20 @@ pub fn build(b: *std.Build) !void {
     const raygui = raylib_dep.module("raygui");
     const raylib_artifact = raylib_dep.artifact("raylib");
 
+    const build_metadata = b.createModule(.{
+        .root_source_file = b.path("build.zig.zon"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
     if (optimize != .Debug) exe_mod.strip = true;
+
+    exe_mod.addImport("build.zig.zon", build_metadata);
     exe_mod.addImport("raylib", raylib);
     exe_mod.addImport("raygui", raygui);
 
@@ -59,8 +67,7 @@ pub fn build(b: *std.Build) !void {
         const exe = b.addExecutable(.{
             .name = "final",
             .root_module = exe_mod,
-            //.use_lld = optimize == .Debug, // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
-            .use_lld = false,
+            .use_lld = !((target.query.os_tag == .linux) or (target.query.os_tag == null)), // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
         });
         b.installArtifact(exe);
 

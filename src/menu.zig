@@ -42,7 +42,7 @@ const levels = [_][:0]const u8{ "PILOT", "TUNNEL", "SHIFTY" };
 pub fn drawLevelSelect(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    util.drawText("FINAL_PROJECT/MISSION_SELECT", 16, 16, 24, .white);
+    util.drawText("FINAL-PROJECT/MISSION-SELECT", 16, 16, 24, .white);
     rect.y += 24 + 4;
 
     for (0.., levels) |i, name| {
@@ -67,11 +67,16 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 }
 
+const version_string = std.fmt.comptimePrint("v{s} (zig v{s})", .{
+    @import("build.zig.zon").version,
+    @import("builtin").zig_version_string,
+});
 pub fn drawMain(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
-    util.drawText("FINAL_PROJECT", 16, 16, 24, .white);
-    rect.y += 24 + 4;
+    util.drawText("FINAL-PROJECT", 16, 16, 24, .white);
+    util.drawText(version_string, 16, 16 + 20, 12, .gray);
+    rect.y += 24 + 12 + 4;
 
     {
         if (util.button(rect, "PLAY")) {
