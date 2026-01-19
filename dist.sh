@@ -3,17 +3,17 @@
 
 set -eux
 
-PLATFORM="$1"
-EXE=""
+RELEASE="$1"
+PLATFORM="$2"
 
 case $PLATFORM in
   linux)
-    zig build --release=fast
     EXE="final"
+    zig build --release="$RELEASE"
     ;;
   windows)
-    zig build -Dtarget=native-windows-gnu --release=fast
     EXE="final.exe"
+    zig build -Dtarget=native-windows-gnu --release="$RELEASE"
     ;;
   *)
     echo "unknown platform: $PLATFORM" > /dev/stderr
@@ -22,5 +22,5 @@ case $PLATFORM in
 esac
 
 cp "zig-out/bin/$EXE" $EXE
-zip -r "dist-$PLATFORM.zip" resources $EXE
+zip -r "dist-$PLATFORM-$RELEASE.zip" resources $EXE
 rm $EXE

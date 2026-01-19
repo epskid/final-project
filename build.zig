@@ -18,12 +18,13 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
+    if (optimize != .Debug) exe_mod.strip = true;
     exe_mod.addImport("raylib", raylib);
     exe_mod.addImport("raygui", raygui);
 
     const run_step = b.step("run", "Run the app");
 
-    //web exports are completely separate
+    // web exports are completely separate
     if (target.query.os_tag == .emscripten) {
         const emsdk = rlz.emsdk;
         const wasm = b.addLibrary(.{
@@ -58,7 +59,7 @@ pub fn build(b: *std.Build) !void {
         const exe = b.addExecutable(.{
             .name = "final",
             .root_module = exe_mod,
-            .use_lld = false, // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
+            .use_lld = target.query.os_tag != .linux, // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
         });
         b.installArtifact(exe);
 
