@@ -40,6 +40,7 @@ pub fn load(path: [:0]const u8) !Self {
                 '?' => .shifty_sand,
                 'w' => .wood,
                 'l' => .lava,
+                'L' => .lava_source,
                 '#' => .grate,
                 '@' => {
                     self.artifact = .init(vec, .zero(), .common);

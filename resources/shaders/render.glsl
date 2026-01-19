@@ -11,6 +11,7 @@
 #define lava 5
 #define wood 6
 #define burning_wood 7
+#define lava_source 8
 
 #define mask_type 0x1F
 #define shift_color 5
@@ -26,7 +27,6 @@ layout(location = 1) uniform float time;
 layout(location = 2) uniform float vignette_radius;
 const float blur = 0.1;
 
-// see logic.glsl for attribution
 const float phi = 1.61803398874989484820459;
 float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
@@ -64,7 +64,7 @@ void main()
             // overlay some noise to differentiate loose and packed sand
             rgb *= 0.75 + (0.25 * rand(vec2(coords), time));
         }
-        if (type == lava) {
+        if ((type == lava) || (type == lava_source)) {
             // overlay some noise on the lava
             rgb *= 0.75 + (0.25 * rand(vec2(coords), time / 10));
         }

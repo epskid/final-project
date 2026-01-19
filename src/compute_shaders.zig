@@ -98,7 +98,7 @@ pub fn HeadlessComputeShader(
 
             rl.gl.rlDisableShader();
 
-            self.time = (self.time + 1) % 6700;
+            self.time = (self.time + 1) % 67;
         }
 
         pub fn readA(self: *const Self, dest: []Logic) void {

@@ -1,6 +1,7 @@
 #version 430
 
 // CRT shader from libretro: https://github.com/libretro/glsl-shaders/blob/master/crt/shaders/crt-pi.glsl
+#define SHARPER
 #define SCANLINES
 #define MASK_TYPE 1
 #define CURVATURE_X 0.10
@@ -19,7 +20,6 @@ uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
 layout (location = 67) uniform vec2 TextureSize;
-layout (location = 68) uniform float time;
 
 out vec4 finalColor;
 

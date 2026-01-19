@@ -146,6 +146,7 @@ pub fn toggleFullscreen() void {
         const mon_h = rl.getMonitorHeight(mon);
         rl.setWindowSize(mon_w, mon_h);
     }
+    rl.toggleBorderlessWindowed();
     rl.toggleFullscreen();
 }
 

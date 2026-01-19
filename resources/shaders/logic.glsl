@@ -11,6 +11,7 @@
 #define lava 5
 #define wood 6
 #define burning_wood 7
+#define lava_source 8
 
 #define mask_type 0x1F
 
@@ -33,9 +34,9 @@ layout(location = 0) uniform uint time;
     && ((y) >= 0) && ((y) <= (screen_height))) buffer_a[(x) + screen_width * (y)] = value
 
 // main update function for sand; can move into empty space or lava
-#define fallTo(x, y) if (((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava)) { \
+#define fallTo(x, y) if (((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava) || ((get((x), (y)) & mask_type) == lava_source)) { \
     set(x0, y0, 0); \
-    if ((get((x), (y)) & mask_type) != lava) set((x), (y), current); \
+    if ((get((x), (y)) & mask_type) == nothing) set((x), (y), current); \
     break; \
 }
 // burning wood can only burn itself
@@ -45,22 +46,19 @@ layout(location = 0) uniform uint time;
     break; \
 }
 // main update function for sand; can move into empty space or lava
-#define flowTo(x, y) if ((y >= (screen_height - 1)) \
-    || ( \
-        ((get((x), (y)) & mask_type) != rock) \
-        && ((get((x), (y)) & mask_type) != packed_sand) \
-        && ((get((x), (y)) & mask_type) != shifty_sand) \
-        && ((get((x), (y)) & mask_type) != lava) \
-    ) \
+#define flowTo(x, y) if ( \
+    ((get((x), (y)) & mask_type) != rock) \
+    && ((get((x), (y)) & mask_type) != packed_sand) \
+    && ((get((x), (y)) & mask_type) != shifty_sand) \
+    && ((get((x), (y)) & mask_type) != lava) \
+    && ((get((x), (y)) & mask_type) != lava_source) \
 ) { \
-    if (r < 0.66) set(x0, y0, 0); \
-    set((x), (y), current); \
+    if ((get(x0, y0) & mask_type) != lava_source) set(x0, y0, 0); \
+    set((x), (y), (current & ~mask_type) | lava); \
     break; \
 }
 
 // "gold noise"
-// a simple random noise function for glsl
-// https://stackoverflow.com/a/28095165
 const float phi = 1.61803398874989484820459;
 float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
@@ -115,11 +113,14 @@ void main() {
             fallTo(x0 + random, y0 - random);
             fallTo(x0 - random, y0 + random);
             break;
+        case lava_source:
         case lava:
-            if (r < 0.7) {
+            if (r < 0.3) {
                 flowTo(x0, y0 + 1); // straight down
-                flowTo(x0 + random, y0); // down left/right
-                flowTo(x0 - random, y0); // down opposite of above
+                flowTo(x0 + 2 * bias, y0); // left/right
+                flowTo(x0 + 1 * bias, y0 + 1); // down left/right
+                flowTo(x0 - 2 * bias, y0); // opposite of above
+                flowTo(x0 - 1 * bias, y0 + 1); // down opposite of above
             }
             break;
         case shifty_sand:

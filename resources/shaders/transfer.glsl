@@ -11,6 +11,7 @@
 #define lava 5
 #define wood 6
 #define burning_wood 7
+#define lava_source 8
 
 #define mask_type 0x1F
 #define shift_color 5
@@ -41,7 +42,6 @@ layout(std430, binding = 3) readonly restrict buffer buffer_commands_layout {
     Command commands[];
 };
 
-// see logic.glsl for attribution
 const float phi = 1.61803398874989484820459;
 float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);

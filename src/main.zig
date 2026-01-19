@@ -84,13 +84,12 @@ pub fn main() !void {
 
             const scale = util.getScale();
             const scaled_size = rl.Vector2.init(
-                util.asf32(consts.width),
-                util.asf32(consts.height),
+                util.asf32(render.texture.width),
+                util.asf32(render.texture.height),
             ).scale(scale);
 
             rl.setShaderValue(pp, 67, &scaled_size, .vec2);
-            const mod_time: f32 = @floatCast(@mod(rl.getTime(), scaled_size.y));
-            rl.setShaderValue(pp, 68, &mod_time, .float);
+
             rl.beginShaderMode(pp);
             defer rl.endShaderMode();
 

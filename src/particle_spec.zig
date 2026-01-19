@@ -10,6 +10,7 @@ pub const ParticleType = enum(u5) {
     lava,
     wood,
     burning_wood,
+    lava_source,
 
     // pseudo particle types -- means something different tile-wise, but are made up of other particle types
     grate,
