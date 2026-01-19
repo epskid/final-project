@@ -126,8 +126,6 @@ pub fn draw(self: *const Self) void {
 
     if (self.player.died or self.player.suffocating) self.player.draw();
 
-    if (Settings.show_fps) rl.drawFPS(0, 0);
-
     const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "QUOTA: {}/{}", .{ self.score, self.level.quota }, 0) catch unreachable;
     defer self.global_allocator.free(score_str);
     util.drawText(score_str, 32, 32, 24, .white);

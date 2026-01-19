@@ -35,7 +35,7 @@ pub fn draw(self: *Self) void {
     rect.y += 24 + 4;
     
     {
-        if(rg.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
+        if(util.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
 
         rect.y += 16 + 4;
     }

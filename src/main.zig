@@ -69,6 +69,8 @@ pub fn main() !void {
             defer render.end();
 
             state.draw();
+
+            if (Settings.show_fps) rl.drawFPS(0, 0);
         }
 
         // switch state
@@ -107,6 +109,8 @@ pub fn main() !void {
         }
     }
 }
+
+const Settings = @import("settings.zig");
 
 const s = @import("state.zig");
 const menu = @import("menu.zig");
