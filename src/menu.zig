@@ -67,7 +67,7 @@ pub fn drawLevelSelect(self: *Self) void {
     }
 }
 
-const version_string = std.fmt.comptimePrint("v{s} (zig v{s})", .{
+const version_string = std.fmt.comptimePrint("v{s} (Zig v{s})", .{
     @import("build.zig.zon").version,
     @import("builtin").zig_version_string,
 });
@@ -75,8 +75,9 @@ pub fn drawMain(self: *Self) void {
     var rect: rl.Rectangle = .init(16, 16, 256, 16);
 
     util.drawText("FINAL-PROJECT", 16, 16, 24, .white);
-    util.drawText(version_string, 16, 16 + 20, 12, .gray);
-    rect.y += 24 + 12 + 4;
+    util.drawText(version_string, consts.width - util.measureText(version_string, 12), 0, 12, .gray);
+
+    rect.y += 24 + 4;
 
     {
         if (util.button(rect, "PLAY")) {
@@ -140,6 +141,7 @@ pub fn deinit(self: *Self, _: std.mem.Allocator) void {
 
 const s = @import("state.zig");
 const util = @import("util.zig");
+const consts = @import("consts.zig");
 const assets = @import("assets.zig");
 
 const rl = @import("raylib");

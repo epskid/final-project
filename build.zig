@@ -11,6 +11,7 @@ pub fn build(b: *std.Build) !void {
     });
     const raylib = raylib_dep.module("raylib");
     const raygui = raylib_dep.module("raygui");
+
     const raylib_artifact = raylib_dep.artifact("raylib");
 
     const build_metadata = b.createModule(.{
@@ -24,7 +25,7 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    if (optimize != .Debug) exe_mod.strip = true;
+    if (optimize != .Debug) exe_mod.strip = true; // fixed wierd pdb bug when building windows
 
     exe_mod.addImport("build.zig.zon", build_metadata);
     exe_mod.addImport("raylib", raylib);

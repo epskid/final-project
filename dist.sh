@@ -9,6 +9,7 @@ case $PLATFORM in
   linux)
     EXE="final"
     zig build --release=fast
+    strip "zig-out/bin/$EXE"
     ;;
   windows)
     EXE="final.exe"

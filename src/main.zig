@@ -16,7 +16,7 @@ pub fn main() !void {
         .window_resizable = true,
         .vsync_hint = true,
     });
-    rl.initWindow(consts.width, consts.height, "FINAL PROJECT");
+    rl.initWindow(consts.width, consts.height, "FINAL-PROJECT");
     defer rl.closeWindow();
     rl.setWindowMinSize(consts.width, consts.height);
     rl.setExitKey(.null);
