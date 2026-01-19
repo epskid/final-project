@@ -46,7 +46,8 @@ pub fn drawLevelSelect(self: *Self) void {
     rect.y += 24 + 4;
 
     for (0.., levels) |i, name| {
-        if (i > unlocked) rg.disable();
+        // hold down backslash to acess all levels (secret cheat code!!)
+        if (!rl.isKeyDown(.backslash) and (i > unlocked)) rg.disable();
 
         if (util.button(rect, name)) {
             self.selected_level = i;

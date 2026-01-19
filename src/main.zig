@@ -82,10 +82,17 @@ pub fn main() !void {
             rl.beginDrawing();
             defer rl.endDrawing();
 
+            const scale = util.getScale();
+            const scaled_size = rl.Vector2.init(
+                util.asf32(consts.width),
+                util.asf32(consts.height),
+            ).scale(scale);
+
+            rl.setShaderValue(pp, 67, &scaled_size, .vec2);
+            const mod_time: f32 = @floatCast(@mod(rl.getTime(), scaled_size.y));
+            rl.setShaderValue(pp, 68, &mod_time, .float);
             rl.beginShaderMode(pp);
             defer rl.endShaderMode();
-
-            const scale = util.getScale();
 
             rl.clearBackground(.black);
             rl.drawTexturePro(
@@ -97,10 +104,10 @@ pub fn main() !void {
                     util.asf32(-render.texture.height),
                 ),
                 .init(
-                    (util.asf32(rl.getScreenWidth()) - (util.asf32(consts.width) * scale)) * 0.5,
-                    (util.asf32(rl.getScreenHeight()) - (util.asf32(consts.height) * scale)) * 0.5,
-                    util.asf32(consts.width) * scale,
-                    util.asf32(consts.height) * scale,
+                    (util.asf32(rl.getScreenWidth()) - scaled_size.x) * 0.5,
+                    (util.asf32(rl.getScreenHeight()) - scaled_size.y) * 0.5,
+                    scaled_size.x,
+                    scaled_size.y,
                 ),
                 .zero(),
                 0.0,

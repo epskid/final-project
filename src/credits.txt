@@ -4,4 +4,5 @@ Music: Me (using LMMS)
 SFX: Various Sounds made with LMMS and Preset LMMS Sounds
 Font: Pixel Intv by Pixel Sagas (www.pixelsagas.com)
 Programming: Myself (and the Raylib project for examples)
+CRT Shader: libretro (crt-pi)
 Player: You (thanks for playing)

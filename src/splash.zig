@@ -14,6 +14,7 @@ pub fn init() !Self {
 }
 
 pub fn tick(self: *Self) !void {
+    if (rl.isKeyPressed(.escape)) self.progress = total_time;
     self.progress += rl.getFrameTime();
 }
 

@@ -35,7 +35,7 @@ layout(location = 0) uniform uint time;
 // main update function for sand; can move into empty space or lava
 #define fallTo(x, y) if (((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava)) { \
     set(x0, y0, 0); \
-    set((x), (y), current); \
+    if ((get((x), (y)) & mask_type) != lava) set((x), (y), current); \
     break; \
 }
 // burning wood can only burn itself
@@ -49,6 +49,7 @@ layout(location = 0) uniform uint time;
     || ( \
         ((get((x), (y)) & mask_type) != rock) \
         && ((get((x), (y)) & mask_type) != packed_sand) \
+        && ((get((x), (y)) & mask_type) != shifty_sand) \
         && ((get((x), (y)) & mask_type) != lava) \
     ) \
 ) { \
