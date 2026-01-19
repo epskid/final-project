@@ -112,7 +112,7 @@ pub fn draw(self: *const Self) void {
     defer if (Settings.screen_shake) rl.endMode2D();
 
     // draw the current scene
-    if (self.level.active == 0) rl.drawTexture(assets.start, 0, 0, .white) else rl.drawTexture(assets.inside, 0, 0, .white);
+    if (self.level.active == 0) rl.drawTexture(assets.outside, 0, 0, .white) else rl.drawTexture(assets.inside, 0, 0, .white);
 
     if (!self.player.died and !self.player.suffocating) self.player.draw();
     if (self.map.artifact) |af| af.draw();

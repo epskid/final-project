@@ -30,12 +30,12 @@ pub fn load() !void {
     artifacts = try util.texFromImg("resources/images/sheets/artifacts.png");
     tileset = try rl.loadImage("resources/images/sheets/tileset.png");
 
-    outside = try util.texFromImg("resources/images/backgrounds/start.png");
+    outside = try util.texFromImg("resources/images/backgrounds/outside.png");
     inside = try util.texFromImg("resources/images/backgrounds/inside.png");
 
     ui_sound = try rl.loadSound("resources/sounds/sfx/select.ogg");
     volume_sound = try rl.loadSound("resources/sounds/sfx/volume.ogg");
-    shoot_sound = try rl.loadSound("resources/sound/sfx/shoot.ogg");
+    shoot_sound = try rl.loadSound("resources/sounds/sfx/shoot.ogg");
     explosion_sound = try rl.loadSound("resources/sounds/sfx/explosion.ogg");
     talk_sound = try rl.loadSound("resources/sounds/sfx/talk.ogg");
     artifact_sound = try rl.loadSound("resources/sounds/sfx/artifact.ogg");
