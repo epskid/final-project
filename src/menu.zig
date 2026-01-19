@@ -10,7 +10,7 @@ selected_level: ?usize,
 
 pub fn init() !Self {
     return .{
-        .background = try util.texFromImg("resources/sprites/background.png"),
+        .background = try util.texFromImg("resources/images/backgrounds/menu.png"),
         .level_select = false,
         .next_state = null,
         .selected_level = null,

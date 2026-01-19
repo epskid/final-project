@@ -8,7 +8,7 @@ progress: f32,
 
 pub fn init() !Self {
     return .{
-        .splash = try util.texFromImg("resources/sprites/splash.png"),
+        .splash = try util.texFromImg("resources/images/splash.png"),
         .progress = 0,
     };
 }
