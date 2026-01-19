@@ -139,6 +139,16 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
     };
 }
 
+pub fn toggleFullscreen() void {
+    if (!rl.isWindowFullscreen()) {
+        const mon = rl.getCurrentMonitor();
+        const mon_w = rl.getMonitorWidth(mon);
+        const mon_h = rl.getMonitorHeight(mon);
+        rl.setWindowSize(mon_w, mon_h);
+    }
+    rl.toggleFullscreen();
+}
+
 const Map = @import("map.zig");
 const Settings = @import("settings.zig");
 

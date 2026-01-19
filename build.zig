@@ -59,7 +59,8 @@ pub fn build(b: *std.Build) !void {
         const exe = b.addExecutable(.{
             .name = "final",
             .root_module = exe_mod,
-            .use_lld = target.query.os_tag != .linux, // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
+            //.use_lld = optimize == .Debug, // https://github.com/raylib-zig/raylib-zig/issues/219#issuecomment-2708936845
+            .use_lld = false,
         });
         b.installArtifact(exe);
 

@@ -21,6 +21,7 @@ pub fn main() !void {
     rl.setWindowMinSize(consts.width, consts.height);
     rl.setExitKey(.null);
     rl.setTargetFPS(60);
+    util.toggleFullscreen();
 
     // load raygui style
     rg.loadStyle("resources/style.rgs");
@@ -33,14 +34,12 @@ pub fn main() !void {
     try assets.load();
     defer assets.unload();
 
-    rl.playMusicStream(assets.menu_music);
-
     // create the texture things are rendered to before post-processing and scaling
     var render = try rl.loadRenderTexture(consts.width, consts.height);
     defer render.unload();
 
     // initialize state
-    var state: s.State = try .init(.menu, allocator);
+    var state: s.State = try .init(.splash, allocator);
     defer state.deinit(allocator);
 
     // initialize post-processing shader

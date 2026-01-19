@@ -33,6 +33,12 @@ pub fn draw(self: *Self) void {
 
     util.drawText("SETTINGS", 16, 16, 24, .white);
     rect.y += 24 + 4;
+    
+    {
+        if(rg.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
+
+        rect.y += 16 + 4;
+    }
 
     {
         const message = if (fractional_scaling) "FRACTIONAL SCALING [ON]" else "FRACTIONAL SCALING [OFF]";

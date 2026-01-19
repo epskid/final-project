@@ -14,6 +14,7 @@ pub const NewStateInfo = struct {
 };
 
 pub const State = union(enum) {
+    splash: ?*Splash,
     menu: ?*Menu,
     controls: ?*Controls,
     settings: ?*Settings,
@@ -35,6 +36,11 @@ pub const State = union(enum) {
 
     pub fn init(state: std.meta.Tag(State), allocator: std.mem.Allocator) !State {
         switch (state) {
+            .splash => {
+                const splash = try allocator.create(Splash);
+                splash.* = try .init();
+                return .{ .splash = splash };
+            },
             .menu => {
                 const menu = try allocator.create(Menu);
                 menu.* = try .init();
@@ -116,6 +122,7 @@ pub const State = union(enum) {
 const Menu = @import("menu.zig");
 const Game = @import("game.zig");
 const Stats = @import("stats.zig");
+const Splash = @import("splash.zig");
 const Credits = @import("credits.zig");
 const Controls = @import("controls.zig");
 const Settings = @import("settings.zig");
