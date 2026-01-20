@@ -97,8 +97,6 @@ pub fn tick(self: *Self) !void {
 
         // tick particle simulation
         inline for (0..particle_simulation_timescale) |_| {
-            // two for the checkerboard pattern
-            self.simulation.compute.tick();
             self.simulation.compute.tick();
         }
 
