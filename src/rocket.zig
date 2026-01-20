@@ -32,7 +32,7 @@ pub fn tick(self: *Self, game: *Game) !void {
         self.position.y,
         consts.tile_size / 4,
         consts.tile_size / 4,
-    ));
+    ), null);
 
     // check range
     if (self.hit_wall) {

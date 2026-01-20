@@ -32,7 +32,7 @@ pub fn init() Self {
     };
 }
 
-const SuffocatingFilter = util.LowpassFilter(750);
+const SuffocatingFilter = util.LowpassFilter(500);
 
 pub fn tick(self: *Self, game: *Game) !void {
     if (self.died) {
@@ -90,9 +90,11 @@ pub fn tick(self: *Self, game: *Game) !void {
                 util.mkTileHitboxAt(self.position),
                 util.mkTileHitboxAt(af.position),
             )) {
-                rl.playSound(assets.artifact_sound);
                 self.artifact = game.map.artifact;
                 game.map.artifact = null;
+
+                const alert = try game.cloneLocal(ReturnToShip, .init());
+                try game.spawn(alert.ticker());
             }
         }
     }
@@ -342,6 +344,7 @@ const Game = @import("game.zig");
 const Rocket = @import("rocket.zig");
 const Artifact = @import("artifact.zig");
 const Explosion = @import("explosion.zig");
+const ReturnToShip = @import("return_to_ship.zig");
 
 const ps = @import("particle_spec.zig");
 const util = @import("util.zig");

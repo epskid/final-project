@@ -2,14 +2,18 @@
 
 const Self = @This();
 
-fn isSolid(tile: ps.ParticleType) bool {
+fn isSolid(tile: ps.ParticleType) enum { yes, no, semisolid } {
     return switch (tile) {
-        .rock => true,
-        .packed_sand => true,
-        .wood => true,
-        .grate => true,
-        .shifty_sand => true,
-        else => false,
+        .rock, .packed_sand, .wood, .shifty_sand => .yes,
+        .grate => .semisolid,
+        else => .no,
+    };
+}
+
+fn isBreakable(tile: ps.ParticleType) bool {
+    return switch (tile) {
+        .rock, .grate => false,
+        else => true,
     };
 }
 
@@ -148,8 +152,11 @@ pub fn spawn(self: *Self, game: *Game) void {
 
 pub fn loadTiles(self: *Self, game: *const Game) void {
     @setRuntimeSafety(false);
+
     var counters: [@typeInfo(ps.ParticleType).@"enum".fields.len]u8 = undefined;
     for (0..self.tiles.len) |tile_i| {
+        if (!isBreakable(self.tiles[tile_i])) continue;
+
         @memset(&counters, 0);
         const x_start = (tile_i % consts.width_tiles) * consts.tile_size;
         const y_start = (tile_i / consts.width_tiles) * consts.tile_size;
@@ -178,13 +185,17 @@ pub fn saveParticles(self: *Self, game: *Game) void {
     self.particles = particles;
 }
 
-pub fn isColliding(self: *const Self, hitbox: rl.Rectangle) bool {
+pub fn isColliding(self: *const Self, hitbox: rl.Rectangle, y_velocity: ?f32) bool {
     // iterate every tile
     for (0.., self.tiles) |i, tile| {
-        if (isSolid(tile)) {
+        const x: f32 = @floatFromInt((i % consts.width_tiles) * consts.tile_size);
+        const y: f32 = @floatFromInt((i / consts.width_tiles) * consts.tile_size);
+        const solid = isSolid(tile);
+        const semisolid = if (y_velocity) |y_vel| (solid == .semisolid) and (hitbox.y + hitbox.height) < (y + 1) and (y_vel > 0) else solid == .semisolid;
+        if (semisolid or (solid == .yes)) {
             if (rl.checkCollisionRecs(hitbox, .init(
-                @floatFromInt((i % consts.width_tiles) * consts.tile_size),
-                @floatFromInt((i / consts.width_tiles) * consts.tile_size),
+                x,
+                y,
                 consts.tile_size,
                 consts.tile_size,
             ))) return true;

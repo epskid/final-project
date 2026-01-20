@@ -130,6 +130,9 @@ pub fn draw(self: *const Self) void {
     defer self.global_allocator.free(score_str);
     util.drawText(score_str, 32, 32, 24, .white);
 
+    if (self.player.artifact != null) {
+    }
+
     self.level.dialog.draw(self.global_allocator) catch unreachable;
 }
 
@@ -142,11 +145,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
             .deinit = false,
         };
     } else if (self.map.tractor_beam) |tb| {
-        if (
-            (self.player.position.y < 0)
-            and (self.player.position.x > (tb.bottom.x - TractorBeam.width))
-            and (self.player.position.x < (tb.bottom.x + TractorBeam.width))
-        ) {
+        if ((self.player.position.y < 0) and (self.player.position.x > (tb.bottom.x - TractorBeam.width)) and (self.player.position.x < (tb.bottom.x + TractorBeam.width))) {
             rl.stopMusicStream(assets.main_music);
             rl.updateMusicStream(assets.main_music);
 
@@ -160,7 +159,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
                 ) catch |e| break :blk e;
                 const stats_dupe = self.global_allocator.create(Stats) catch |e| break :blk e;
                 stats_dupe.* = stats;
-                break :blk s.NewStateInfo {
+                break :blk s.NewStateInfo{
                     .new_state = .{
                         .inited = .{
                             .stats = stats_dupe,

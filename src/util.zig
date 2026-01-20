@@ -58,11 +58,11 @@ pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbo
     // find maximum change in y-direction
     var dy: f32 = 0;
     // take big steps until a collision or we exceed maximum movement
-    while ((dy < dv_max.y) and !map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox))) dy += step.y;
+    while ((dy < dv_max.y) and !map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox), step.y)) dy += step.y;
     // clamp to max step
     if (dy >= dv_max.y) dy = dv_max.y;
     // back up until there are no more collisions
-    while (map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox))) {
+    while (map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox), step.y)) {
         dy -= step.y * dt;
         velocity.y = 0; // we've hit something, stop y-movement
         if (step.y > 0) {
@@ -75,11 +75,11 @@ pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbo
 
     // same thing for x
     var dx: f32 = 0;
-    while ((dx < dv_max.x) and !map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox))) dx += step.x;
+    while ((dx < dv_max.x) and !map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox), 0)) dx += step.x;
     if (dx >= dv_max.x) {
         dx = dv_max.x;
     }
-    while (map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox))) {
+    while (map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox), 0)) {
         dx -= step.x * dt;
         velocity.x = 0;
     }
@@ -140,13 +140,15 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
 }
 
 pub fn toggleFullscreen() void {
+    rl.setWindowState(.{
+        .window_undecorated = !rl.isWindowFullscreen(),
+    });
     if (!rl.isWindowFullscreen()) {
         const mon = rl.getCurrentMonitor();
         const mon_w = rl.getMonitorWidth(mon);
         const mon_h = rl.getMonitorHeight(mon);
         rl.setWindowSize(mon_w, mon_h);
     }
-    rl.toggleBorderlessWindowed();
     rl.toggleFullscreen();
 }
 
