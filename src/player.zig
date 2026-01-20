@@ -32,6 +32,15 @@ pub fn init() Self {
     };
 }
 
+pub fn getHitbox(self: *const Self) rl.Rectangle {
+    return .init(
+        0,
+        if (self.artifact != null) -consts.tile_size else 0,
+        consts.tile_size,
+        if (self.artifact != null) (2 * consts.tile_size) else consts.tile_size,
+    );
+}
+
 const SuffocatingFilter = util.LowpassFilter(500);
 
 pub fn tick(self: *Self, game: *Game) !void {
@@ -133,7 +142,7 @@ pub fn tick(self: *Self, game: *Game) !void {
                 }
             }
         }
-        self.suffocating = sand_count > 200;
+        self.suffocating = sand_count > 100;
         if (self.suffocating) {
             if (self.suffocation) |*suf| {
                 suf.* -= dt;
@@ -178,12 +187,7 @@ pub fn tick(self: *Self, game: *Game) !void {
     const collision = util.moveAndCollide(
         &self.position,
         &self.velocity,
-        .{
-            .x = 0,
-            .y = if (self.artifact != null) -consts.tile_size else 0,
-            .width = consts.tile_size,
-            .height = if (self.artifact != null) (2 * consts.tile_size) else consts.tile_size,
-        },
+        self.getHitbox(),
         game.map,
     );
 
@@ -193,21 +197,34 @@ pub fn tick(self: *Self, game: *Game) !void {
     // keep player in-bounds if nothing lies off screen
     // or advance them if there is
     if (!game.level.advance(game)) {
-        const old_pos = self.position;
-        self.position = self.position.clamp(
-            .init(-0.75 * consts.tile_size, -0.75 * consts.tile_size),
-            .init(consts.width - 0.25 * consts.tile_size, consts.height - 0.25 * consts.tile_size),
-        );
-        if (old_pos.x != self.position.x) {
-            self.velocity.x = 0;
-        }
-        if (old_pos.y != self.position.y) {
-            self.velocity.y = 0;
-
-            if (self.position.y > 0) {
-                self.die();
-                return;
+        const min: rl.Vector2 = .init(-consts.tile_size, -consts.tile_size);
+        const max: rl.Vector2 = .init(consts.width, consts.height);
+        if (self.position.x < min.x or self.position.x > max.x) {
+            self.velocity.x = -self.velocity.x;
+            while (self.position.x < min.x or self.position.x > max.x) {
+                _ = util.moveAndCollide(
+                    &self.position,
+                    &self.velocity,
+                    self.getHitbox(),
+                    game.map,
+                );
             }
+        }
+        if (self.position.y < min.y) {
+            self.velocity.y = -self.velocity.y;
+            while (self.position.y < min.y or self.position.y > max.y) {
+                _ = util.moveAndCollide(
+                    &self.position,
+                    &self.velocity,
+                    self.getHitbox(),
+                    game.map,
+                );
+            }
+        }
+
+        if (self.position.y > max.y) {
+            self.die();
+            return;
         }
     }
 
@@ -269,14 +286,14 @@ pub fn spawnAtTractor(self: *Self, game: *Game) void {
 
 pub fn draw(self: *const Self) void {
     if (self.died) {
-        const text = "YOU DIED -- PRESS ANY KEY TO CONTINUE";
-        const size = 12;
+        const text = "YOU DIED. SAD!";
+        const size = 24;
         const width = util.measureText(text, size);
         const pad = 4;
         rl.drawRectangle(
-            consts.width / 2 - @divFloor(width, 2) - pad,
+            0,
             consts.height / 2 - size / 2 - pad,
-            width + pad * 2,
+            consts.width,
             size + pad * 2,
             consts.palette.x3B2027,
         );

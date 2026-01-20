@@ -1,8 +1,9 @@
-r                                      r
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 r                                      r
 r                                      r
                                        r
                                        r
+r###                                   r
 r                                      r
 r                                      r
 r                                      r
@@ -14,17 +15,16 @@ r                                      r
 r                                      r
 r                                      r
 r                                      r
-r wwwwwwwwww                           r
 r                                      r
 r                                      r
 r                                      r
 r                                      r
 r                                      r
 r                                      r
-r wwwwwwwwww                           r
 r                                      r
 r                                      r
 r                                      r
 r                                      r
-rSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSr
+r                                      r
+r                                   $  r
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

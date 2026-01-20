@@ -15,6 +15,9 @@ pub fn init(previous_state: ?s.State) Self {
 // when on, pixels may vary in size
 pub var fractional_scaling: bool = true;
 
+// do post-processing shaders
+pub var post_malone: bool = true;
+
 // show fps in top left
 pub var show_fps: bool = false;
 
@@ -43,6 +46,13 @@ pub fn draw(self: *Self) void {
     {
         const message = if (fractional_scaling) "FRACTIONAL SCALING [ON]" else "FRACTIONAL SCALING [OFF]";
         _ = rg.toggle(rect, message, &fractional_scaling);
+
+        rect.y += 16 + 4;
+    }
+
+    {
+        const message = if (post_malone) "POST PROCESSING [ON]" else "POST PROCESSING [OFF]";
+        _ = rg.toggle(rect, message, &post_malone);
 
         rect.y += 16 + 4;
     }

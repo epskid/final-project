@@ -94,7 +94,7 @@ void main() {
             break;
         case burning_wood:
             // 5% chance to decay each frame
-            if (r < 0.01) {
+            if (r < 0.05) {
                 set(x0, y0, 0);
                 break;
             }

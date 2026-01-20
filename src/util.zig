@@ -30,8 +30,7 @@ pub inline fn skinHitbox(hitbox: rl.Rectangle) rl.Rectangle {
     );
 }
 
-inline fn mkHitbox(pos: rl.Vector2, hitbox: rl.Rectangle) rl.Rectangle {
-    // utility function for use within another utility function
+pub inline fn moveHitbox(pos: rl.Vector2, hitbox: rl.Rectangle) rl.Rectangle {
     return .init(
         hitbox.x + pos.x,
         hitbox.y + pos.y,
@@ -58,11 +57,11 @@ pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbo
     // find maximum change in y-direction
     var dy: f32 = 0;
     // take big steps until a collision or we exceed maximum movement
-    while ((dy < dv_max.y) and !map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox), step.y)) dy += step.y;
+    while ((dy < dv_max.y) and !map.isColliding(moveHitbox(position.add(.init(0, dy)), hitbox), step.y)) dy += step.y;
     // clamp to max step
-    if (dy >= dv_max.y) dy = dv_max.y;
+    if (dy > dv_max.y) dy = dv_max.y;
     // back up until there are no more collisions
-    while (map.isColliding(mkHitbox(position.add(.init(0, dy)), hitbox), step.y)) {
+    while (map.isColliding(moveHitbox(position.add(.init(0, dy)), hitbox), step.y)) {
         dy -= step.y * dt;
         velocity.y = 0; // we've hit something, stop y-movement
         if (step.y > 0) {
@@ -75,12 +74,10 @@ pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbo
 
     // same thing for x
     var dx: f32 = 0;
-    while ((dx < dv_max.x) and !map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox), 0)) dx += step.x;
-    if (dx >= dv_max.x) {
-        dx = dv_max.x;
-    }
-    while (map.isColliding(mkHitbox(position.add(.init(dx, 0)), hitbox), 0)) {
-        dx -= step.x * dt;
+    while ((dx < dv_max.x) and !map.isColliding(moveHitbox(position.add(.init(dx, 0)), hitbox), 0)) dx += step.x;
+    if (dx > dv_max.x) dx = dv_max.x;
+    while (map.isColliding(moveHitbox(position.add(.init(dx, 0)), hitbox), 0)) {
+        dx -= step.x * dt / 2;
         velocity.x = 0;
     }
 

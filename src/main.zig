@@ -83,15 +83,17 @@ pub fn main() !void {
             defer rl.endDrawing();
 
             const scale = util.getScale();
-            const scaled_size = rl.Vector2.init(
+            const texture_size = rl.Vector2.init(
                 util.asf32(render.texture.width),
                 util.asf32(render.texture.height),
-            ).scale(scale);
+            );
 
-            rl.setShaderValue(pp, 67, &scaled_size, .vec2);
+            rl.setShaderValue(pp, 67, &texture_size, .vec2);
 
-            rl.beginShaderMode(pp);
-            defer rl.endShaderMode();
+            const scaled_size = texture_size.scale(scale);
+
+            if (settings.post_malone) rl.beginShaderMode(pp);
+            defer if (settings.post_malone) rl.endShaderMode();
 
             rl.clearBackground(.black);
             rl.drawTexturePro(
@@ -123,6 +125,7 @@ const menu = @import("menu.zig");
 const util = @import("util.zig");
 const consts = @import("consts.zig");
 const assets = @import("assets.zig");
+const settings = @import("settings.zig");
 
 const rl = @import("raylib");
 const rg = @import("raygui");
