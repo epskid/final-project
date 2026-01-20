@@ -194,8 +194,6 @@ pub fn tick(self: *Self, game: *Game) !void {
     // update states
     self.grounded = collision.grounded;
 
-    // keep player in-bounds if nothing lies off screen
-    // or advance them if there is
     if (!game.level.advance(game)) {
         const min: rl.Vector2 = .init(-consts.tile_size, -consts.tile_size);
         const max: rl.Vector2 = .init(consts.width, consts.height);
@@ -209,22 +207,6 @@ pub fn tick(self: *Self, game: *Game) !void {
                     game.map,
                 );
             }
-        }
-        if (self.position.y < min.y) {
-            self.velocity.y = -self.velocity.y;
-            while (self.position.y < min.y or self.position.y > max.y) {
-                _ = util.moveAndCollide(
-                    &self.position,
-                    &self.velocity,
-                    self.getHitbox(),
-                    game.map,
-                );
-            }
-        }
-
-        if (self.position.y > max.y) {
-            self.die();
-            return;
         }
     }
 

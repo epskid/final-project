@@ -14,6 +14,7 @@ pub const ParticleType = enum(u5) {
 
     // pseudo particle types -- means something different tile-wise, but are made up of other particle types
     grate,
+    barrier,
 };
 
 // the "logic" type for the compute shaders

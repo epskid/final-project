@@ -57,7 +57,7 @@ pub fn drawLevelSelect(self: *Self) void {
         rect.y += 16 + 4;
     }
 
-    if (util.button(rect, "THE END")) {
+    if (util.button(rect, "CLOSING")) {
         self.next_state = .ending;
     }
 

@@ -119,7 +119,7 @@ pub fn advance(self: *Self, game: *Game) bool {
     } else return false;
 
     if (self.maps[new_active].isColliding(
-        util.skinHitbox(util.moveHitbox(game.player.position, game.player.getHitbox())),
+        util.skinHitbox(util.moveHitbox(pos, game.player.getHitbox())),
         game.player.velocity.y,
     )) return false;
 

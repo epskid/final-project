@@ -25,13 +25,13 @@ layout(std430, binding = 1) buffer buffer_a_layout {
 
 layout(location = 0) uniform uint time;
 
-#define get(x, y) (((x) > (screen_width - 1)) ? 0 : \
+#define get(x, y) (((x) >= screen_width) ? 0 : \
     (((x) < 0) ? 0 : \
-     (((y) > (screen_height - 1)) ? 0 : \
+     (((y) >= screen_height) ? 0 : \
       ((y < 0) ? 0 : buffer_a[(x) + screen_width * (y)]))))
 #define set(x, y, value) if ( \
-    ((x) >= 0) && ((x) <= (screen_width)) \
-    && ((y) >= 0) && ((y) <= (screen_height))) buffer_a[(x) + screen_width * (y)] = value
+    ((x) >= 0) && ((x) <= (screen_width - 1)) \
+    && ((y) >= 0) && ((y) <= (screen_height - 1))) buffer_a[(x) + screen_width * (y)] = value
 
 // main update function for sand; can move into empty space or lava
 #define fallTo(x, y) if (((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava) || ((get((x), (y)) & mask_type) == lava_source)) { \

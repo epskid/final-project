@@ -4,7 +4,7 @@ const Self = @This();
 
 fn isSolid(tile: ps.ParticleType) enum { yes, no, semisolid } {
     return switch (tile) {
-        .rock, .packed_sand, .wood, .shifty_sand => .yes,
+        .rock, .packed_sand, .wood, .shifty_sand, .barrier => .yes,
         .grate => .semisolid,
         else => .no,
     };
@@ -12,7 +12,7 @@ fn isSolid(tile: ps.ParticleType) enum { yes, no, semisolid } {
 
 fn isBreakable(tile: ps.ParticleType) bool {
     return switch (tile) {
-        .rock, .grate => false,
+        .barrier, .rock, .grate => false,
         else => true,
     };
 }
@@ -46,6 +46,7 @@ pub fn load(path: [:0]const u8) !Self {
                 'l' => .lava,
                 'L' => .lava_source,
                 '#' => .grate,
+                'x' => .barrier,
                 '@' => {
                     self.artifact = .init(vec, .zero(), .common);
                     continue;
@@ -105,7 +106,7 @@ pub fn spawn(self: *Self, game: *Game) void {
                     var place: u32 = 0;
 
                     // sample the pixel color from the tileset
-                    if (tile != .none) blk: {
+                    if ((tile != .none) and (tile != .barrier)) blk: {
                         var color = assets.tileset.getColor(@intCast(w + (@as(usize, @intCast(@intFromEnum(tile) - 1)) * consts.tile_size)), @intCast(h));
                         if (color.a == 0) break :blk;
 
@@ -197,8 +198,8 @@ pub fn isColliding(self: *const Self, hitbox: rl.Rectangle, y_velocity: ?f32) bo
 
             const tile = self.tiles[@as(usize, @intFromFloat(x_tile_clamped + (y_tile_clamped * consts.width_tiles)))];
 
-            const x = x_tile_clamped * consts.tile_size;
-            const y = y_tile_clamped * consts.tile_size;
+            const x = x_tile * consts.tile_size;
+            const y = y_tile * consts.tile_size;
 
             const solid = isSolid(tile);
             const semisolid = if (y_velocity) |y_vel| (solid == .semisolid) and (hitbox.y + hitbox.height) < (y + 1) and (y_vel > 0) else solid == .semisolid;

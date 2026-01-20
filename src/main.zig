@@ -60,15 +60,15 @@ pub fn main() !void {
         }
 
         // tick everything
-        try state.tick();
-
         {
             // render to the render texture
 
             render.begin();
             defer render.end();
 
+            try state.tick();
             state.draw();
+            if (rl.isKeyDown(.p)) try state.tick();
 
             if (Settings.show_fps) rl.drawFPS(0, 0);
         }

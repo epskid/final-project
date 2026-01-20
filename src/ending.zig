@@ -80,7 +80,9 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
     return null;
 }
 
-pub fn deinit(_: *Self, _: std.mem.Allocator) void {}
+pub fn deinit(self: *Self, _: std.mem.Allocator) void {
+    rl.unloadTexture(self.end_background);
+}
 
 const s = @import("state.zig");
 const util = @import("util.zig");
