@@ -57,6 +57,12 @@ pub fn drawLevelSelect(self: *Self) void {
         rect.y += 16 + 4;
     }
 
+    if (util.button(rect, "THE END")) {
+        self.next_state = .ending;
+    }
+
+    rect.y += 16 + 4;
+
     rg.enable();
 
     {
@@ -129,7 +135,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
             .new_state = .{
                 .needs_init = ns,
             },
-            .deinit = (ns == .playing) or (ns == .credits),
+            .deinit = (ns == .playing) or (ns == .credits) or (ns == .ending),
         };
     }
 
