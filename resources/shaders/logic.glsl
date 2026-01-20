@@ -117,9 +117,9 @@ void main() {
         case lava:
             flowTo(x0, y0 + 1); // straight down
             flowTo(x0 + 2 * bias, y0); // left/right
-            flowTo(x0 + 1 * bias, y0 + 1); // down left/right
+            flowTo(x0 + bias, y0 + 1); // down left/right
             flowTo(x0 - 2 * bias, y0); // opposite of above
-            flowTo(x0 - 1 * bias, y0 + 1); // down opposite of above
+            flowTo(x0 - bias, y0 + 1); // down opposite of above
             break;
         case shifty_sand:
             if (

@@ -2,9 +2,9 @@ rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 r                                      r
 r                                 S    r
 r                      S         %S    r
-rwwwwwwwwwwwwwwssssssssssssssssssssssssr
-rwwwwwwwwwwwwwwssssssssssssssssssssssssr
-rwwwwwwwwwwwwwwssssssssssssssssssssssssr
+rsssssssssssssswwwwwwwwwwwwssssssssssssr
+rsssssssssssssswwwwwwwwwwwwssssssssssssr
+rsssssssssssssswwwwwwwwwwwwssssssssssssr
 r                                       
 r                                       
 r                                       

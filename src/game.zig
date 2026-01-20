@@ -77,32 +77,35 @@ pub fn spawn(self: *Self, ticker: Ticker) !void {
 pub fn tick(self: *Self) !void {
     self.camera.offset = .zero();
 
-    self.level.dialog.tick(self);
-    if (self.level.dialog.active != null) return;
+    if (!self.player.died) {
+        self.level.dialog.tick(self);
 
-    // tick the tickers
-    var i = self.tickers.items.len;
-    while (i > 0) {
-        i -= 1;
-        try self.tickers.items[i].tick(self);
-        if (self.tickers.items[i].shouldDespawn()) {
-            _ = self.tickers.swapRemove(i); // not a memory leak 'cause all tickers are freed on room change
+        if (self.level.dialog.active != null) return;
+
+        // tick the tickers
+        var i = self.tickers.items.len;
+        while (i > 0) {
+            i -= 1;
+            try self.tickers.items[i].tick(self);
+            if (self.tickers.items[i].shouldDespawn()) {
+                _ = self.tickers.swapRemove(i); // not a memory leak 'cause all tickers are freed on room change
+            }
         }
+
+        if (self.map.artifact) |*af| af.tick(self);
+        if (self.map.tractor_beam) |*tb| tb.tick(self);
+
+        // tick particle simulation
+        inline for (0..particle_simulation_timescale) |_| {
+            // two for the checkerboard pattern
+            self.simulation.compute.tick();
+            self.simulation.compute.tick();
+        }
+
+        self.simulation.compute.readA(self.particles);
+
+        self.map.loadTiles(self);
     }
-
-    if (self.map.artifact) |*af| af.tick(self);
-    if (self.map.tractor_beam) |*tb| tb.tick(self);
-
-    // tick particle simulation
-    inline for (0..particle_simulation_timescale) |_| {
-        // two for the checkerboard pattern
-        self.simulation.compute.tick();
-        self.simulation.compute.tick();
-    }
-
-    self.simulation.compute.readA(self.particles);
-
-    self.map.loadTiles(self);
 
     try self.player.tick(self);
 }
@@ -129,9 +132,6 @@ pub fn draw(self: *const Self) void {
     const score_str = std.fmt.allocPrintSentinel(self.global_allocator, "QUOTA: {}/{}", .{ self.score, self.level.quota }, 0) catch unreachable;
     defer self.global_allocator.free(score_str);
     util.drawText(score_str, 32, 32, 24, .white);
-
-    if (self.player.artifact != null) {
-    }
 
     self.level.dialog.draw(self.global_allocator) catch unreachable;
 }

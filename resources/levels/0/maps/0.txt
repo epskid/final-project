@@ -19,9 +19,9 @@
                       rrrrrrrrrrrrrrrrrr
                      rrrrrrrrrrrrrrrrrrr
    ^                rrrrrrrrrrrrrrrrrrrr
-rrrrrrr         ###rrrrrrrrrrrrrrrrrrrrr
-rrrrrrrr               rrrrrrrrrrrrrrrrr
-rrrrrrrrrrr                             
+rrrrrrrrr          rrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrr             rrrrrrrrrrrrrrrrr
+rrrrrrrrrr                              
 rrrrrrrrrrrr                            
 rrrrrrrrrrrrrrrrrr    
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr

@@ -200,7 +200,7 @@ pub fn tick(self: *Self, game: *Game) !void {
         );
         if (old_pos.x != self.position.x) {
             self.velocity.x = 0;
-        } else {}
+        }
         if (old_pos.y != self.position.y) {
             self.velocity.y = 0;
 

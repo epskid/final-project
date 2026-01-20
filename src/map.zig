@@ -186,19 +186,30 @@ pub fn saveParticles(self: *Self, game: *Game) void {
 }
 
 pub fn isColliding(self: *const Self, hitbox: rl.Rectangle, y_velocity: ?f32) bool {
-    // iterate every tile
-    for (0.., self.tiles) |i, tile| {
-        const x: f32 = @floatFromInt((i % consts.width_tiles) * consts.tile_size);
-        const y: f32 = @floatFromInt((i / consts.width_tiles) * consts.tile_size);
-        const solid = isSolid(tile);
-        const semisolid = if (y_velocity) |y_vel| (solid == .semisolid) and (hitbox.y + hitbox.height) < (y + 1) and (y_vel > 0) else solid == .semisolid;
-        if (semisolid or (solid == .yes)) {
-            if (rl.checkCollisionRecs(hitbox, .init(
-                x,
-                y,
-                consts.tile_size,
-                consts.tile_size,
-            ))) return true;
+    for (0..@intFromFloat(@ceil(hitbox.width / consts.tile_size) + 1)) |x_tile_rel| {
+        const x_tile: f32 = @floor(hitbox.x / consts.tile_size) + util.asf32(x_tile_rel);
+        for (0..@intFromFloat(@ceil(hitbox.height / consts.tile_size) + 1)) |y_tile_rel| {
+            const y_tile: f32 = @floor(hitbox.y / consts.tile_size) + util.asf32(y_tile_rel);
+
+            // walls extend out the bounds of the map
+            const x_tile_clamped = std.math.clamp(x_tile, 0, consts.width_tiles - 1);
+            const y_tile_clamped = std.math.clamp(y_tile, 0, consts.height_tiles - 1);
+
+            const tile = self.tiles[@as(usize, @intFromFloat(x_tile_clamped + y_tile_clamped * consts.width_tiles))];
+
+            const x = x_tile_clamped * consts.tile_size;
+            const y = y_tile_clamped * consts.tile_size;
+
+            const solid = isSolid(tile);
+            const semisolid = if (y_velocity) |y_vel| (solid == .semisolid) and (hitbox.y + hitbox.height) < (y + 1) and (y_vel > 0) else solid == .semisolid;
+            if (semisolid or (solid == .yes)) {
+                if (rl.checkCollisionRecs(hitbox, .init(
+                    x,
+                    y,
+                    consts.tile_size,
+                    consts.tile_size,
+                ))) return true;
+            }
         }
     }
 

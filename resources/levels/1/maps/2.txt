@@ -1,15 +1,15 @@
-rrrrrrrrrrrrLrrrrrrrrrrrrrrrr          r
-r              rrrrrrrrrrrrrr          r
-r              rrrrrrrrrrrrrr          r
-r  +           rrrrrrrrrrrrrr          r
-rssssssrrrrrrrrrrrrrrrrrrrrrr          r
-rssssssrrrrrrrrrrrrrrrrrrrrrr          r
-rssssssrrrrrrrrrrrrrrrrrrrrrr          r
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrr          r
+r     lrrrrrrrrrrrrrrrrrrrrrr          r
+r     lrrrrrrrrrrrrrrrrrrrrrr          r
+r  + llrrrrrrrrrrrrrrrrrrrrrr          r
+rrrsrrrrrrrrrrrrrrrrrrrrrrrrr          r
+rrrsrrrrrrrrrrrrrrrrrrrrrrrrr          r
+rrrsrrrrrrrrrrrrrrrrrrrrrrrrr          r
                                        r
                                        r
                                        r
                                        r
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr     r
+rr   rrrrrrrrrrrrrrrrrrrrrrrrrrrrr     r
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr     r
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr     r
 r                                      r
