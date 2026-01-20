@@ -72,7 +72,7 @@ void main() {
                     }
                     break;
                 case wood:
-                    buffer_a[i] = 0xC6C3B5 << shift_color; // nice ashy color
+                    buffer_a[i] = 0x676767 << shift_color; // burning color
                     buffer_a[i] |= burning_wood; // burn the wood
                     break;
             }

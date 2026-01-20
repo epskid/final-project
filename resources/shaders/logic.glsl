@@ -97,13 +97,13 @@ void main() {
             fallTo(x0 - bias, y0 + 1); // down opposite of above
             break;
         case burning_wood:
-            // 5% chance to decay each frame
-            if (r < 0.05) {
+            // 1% chance to decay each frame
+            if (r > 0.99) {
                 set(x0, y0, 0);
                 break;
             }
 
-            // 10% chance to burn
+            // 9% chance to burn
             if (r > 0.9) {
                 burnTo(x0 - bias, y0);
                 burnTo(x0 + bias, y0);
@@ -111,7 +111,7 @@ void main() {
                 burnTo(x0, y0 + random);
             }
 
-            // otherwise behave like anti-gravity sand
+            // otherwise behave like anti-gravity sand (smoke)
             fallTo(x0, y0 + random);
             fallTo(x0, y0 - random);
             fallTo(x0 + random, y0 - random);

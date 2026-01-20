@@ -2,7 +2,7 @@
 
 const Self = @This();
 
-const particle_simulation_timescale = 8;
+const particle_simulation_timescale = 16;
 
 index: usize,
 camera: rl.Camera2D,
