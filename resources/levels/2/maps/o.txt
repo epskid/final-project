@@ -1,14 +1,8 @@
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrLrrrrrrrrrLrrrrrrrrrrrrrr
 r                                      r
 r                                      r
                                        r
                                        r
-r###                                   r
-r                                      r
-r                                      r
-r                                      r
-r                                      r
-r                                      r
 r                                      r
 r                                      r
 r                                      r
@@ -27,4 +21,10 @@ r                                      r
 r                                      r
 r                                      r
 r                                   $  r
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrr                          rrrrr
+r                                      r
+r                                      r
+r                                      r
+rllllllllllllllllllllllllllllllllllllllr
+rllllllllllllllllllllllllllllllllllllllr
+rLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLr

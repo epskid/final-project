@@ -33,7 +33,7 @@ layout(location = 0) uniform uint time;
 
 #define get(x, y) (((x) >= screen_width) ? 0 : \
     (((x) < 0) ? 0 : \
-     (((y) >= screen_height) ? 0 : \
+     (((y) > screen_height) ? 0 : \
       ((y < 0) ? 0 : buffer_a[(x) + screen_width * (y)]))))
 #define set(x, y, value) if ( \
     ((x) >= 0) && ((x) <= (screen_width - 1)) \
@@ -120,11 +120,13 @@ void main() {
             break;
         case lava_source:
         case lava:
-            flowTo(x0, y0 + 1); // straight down
-            flowTo(x0 + random, y0); // left/right
-            flowTo(x0 - random, y0); // opposite of above
-            flowTo(x0 + random, y0 + 1); // left/right + down
-            flowTo(x0 - random, y0 + 1); // opposite of above
+            if (time % 60 == 0) {
+                flowTo(x0, y0 + 1); // straight down
+                flowTo(x0 + random, y0); // left/right
+                flowTo(x0 - random, y0); // opposite of above
+                flowTo(x0 + random, y0 + 1); // left/right + down
+                flowTo(x0 - random, y0 + 1); // opposite of above
+            }
             break;
         case shifty_sand:
             if (
