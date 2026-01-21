@@ -131,6 +131,15 @@ pub fn draw(self: *const Self) void {
     defer self.global_allocator.free(score_str);
     util.drawText(score_str, 32, 32, 24, .white);
 
+    if (Settings.show_timer) {
+        const time_remaining: u32 = @intFromFloat(rl.getMusicTimeLength(assets.main_music) - rl.getMusicTimePlayed(assets.main_music));
+        const time_minutes = @divFloor(time_remaining, 60);
+        const time_seconds = time_remaining % 60;
+        const timer_str = std.fmt.allocPrintSentinel(self.global_allocator, "TIME: {}:{:0>2}", .{time_minutes, time_seconds}, 0) catch unreachable;
+        defer self.global_allocator.free(timer_str);
+        util.drawText(timer_str, 32, 32 + 24, 24, .white);
+    }
+
     self.level.dialog.draw(self.global_allocator) catch unreachable;
 }
 

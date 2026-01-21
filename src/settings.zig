@@ -21,6 +21,9 @@ pub var post_malone: bool = true;
 // show fps in top left
 pub var show_fps: bool = false;
 
+// show a timer
+pub var show_timer: bool = false;
+
 // skip all dialogue
 pub var skip_dialogue: bool = false;
 
@@ -28,6 +31,12 @@ pub var skip_dialogue: bool = false;
 pub var screen_shake: bool = true;
 
 pub fn tick(_: *Self) !void {}
+
+inline fn toggler(setting: *bool, name: [:0]const u8, rect: *rl.Rectangle) void {
+    const message = if (setting.*) name ++ " [ON]" else name ++ " [OFF]";
+    _ = rg.toggle(rect.*, message, setting);
+    rect.y += 16 + 4;
+}
 
 pub fn draw(self: *Self) void {
     rl.drawTexture(assets.inside, 0, 0, .white);
@@ -43,40 +52,12 @@ pub fn draw(self: *Self) void {
         rect.y += 16 + 4;
     }
 
-    {
-        const message = if (fractional_scaling) "FRACTIONAL SCALING [ON]" else "FRACTIONAL SCALING [OFF]";
-        _ = rg.toggle(rect, message, &fractional_scaling);
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        const message = if (post_malone) "POST PROCESSING [ON]" else "POST PROCESSING [OFF]";
-        _ = rg.toggle(rect, message, &post_malone);
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        const message = if (show_fps) "SHOW FPS [ON]" else "SHOW FPS [OFF]";
-        _ = rg.toggle(rect, message, &show_fps);
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        const message = if (skip_dialogue) "SKIP DIALOGUE [ON]" else "SKIP DIALOGUE [OFF]";
-        _ = rg.toggle(rect, message, &skip_dialogue);
-
-        rect.y += 16 + 4;
-    }
-
-    {
-        const message = if (screen_shake) "SCREEN SHAKE [ON]" else "SCREEN SHAKE [OFF]";
-        _ = rg.toggle(rect, message, &screen_shake);
-
-        rect.y += 16 + 4;
-    }
+    toggler(&fractional_scaling, "FRACTIONAL SCALING", &rect);
+    toggler(&post_malone, "POST PROCESSING", &rect);
+    toggler(&show_fps, "SHOW FPS", &rect);
+    toggler(&show_timer, "SHOW TIMER", &rect);
+    toggler(&skip_dialogue, "SKIP DIALOGUE", &rect);
+    toggler(&screen_shake, "SCREEN SHAKE", &rect);
 
     {
         var new_volume = rl.getMasterVolume() * 100;
