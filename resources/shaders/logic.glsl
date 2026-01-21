@@ -84,6 +84,7 @@ void main() {
         case rock:
         case packed_sand:
         case wood:
+            unclaim(x0, y0);
             return;
     }
 

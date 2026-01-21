@@ -194,12 +194,24 @@ pub fn tick(self: *Self, game: *Game) !void {
     // update states
     self.grounded = collision.grounded;
 
+    // bounce the player inbounds if they can't get to the next map
     if (!game.level.advance(game)) {
         const min: rl.Vector2 = .init(-consts.tile_size, -consts.tile_size);
         const max: rl.Vector2 = .init(consts.width, consts.height);
         if (self.position.x < min.x or self.position.x > max.x) {
             self.velocity.x = -self.velocity.x;
             while (self.position.x < min.x or self.position.x > max.x) {
+                _ = util.moveAndCollide(
+                    &self.position,
+                    &self.velocity,
+                    self.getHitbox(),
+                    game.map,
+                );
+            }
+        }
+        if (self.position.y < min.y or self.position.y > max.y) {
+            self.velocity.y = -self.velocity.y;
+            while (self.position.y < min.y or self.position.y > max.y) {
                 _ = util.moveAndCollide(
                     &self.position,
                     &self.velocity,
