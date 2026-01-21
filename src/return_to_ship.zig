@@ -31,6 +31,14 @@ pub fn draw(self: *const Self) void {
     if (!self.on) return;
 
     const w = util.measureText(return_to_ship, size);
+    const pad = 4;
+    rl.drawRectangle(
+        0,
+        consts.height / 2 - size / 2 - pad,
+        consts.width,
+        size + 2 * pad,
+        .init(67, 67, 67, 67),
+    );
     util.drawText(
         return_to_ship,
         consts.width / 2 - @divTrunc(w, 2),
