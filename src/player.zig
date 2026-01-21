@@ -66,7 +66,7 @@ pub fn tick(self: *Self, game: *Game) !void {
     rl.updateMusicStream(assets.main_music);
     if (was_playing and !rl.isMusicStreamPlaying(assets.main_music)) {
         self.exploding = 60;
-        const exp = try game.cloneLocal(Explosion, .init(self.position, 60, false));
+        const exp = try game.cloneLocal(Explosion, .init(self.position.addValue(consts.tile_size / 2), 60, false));
         try game.spawn(exp.ticker());
         return;
     }

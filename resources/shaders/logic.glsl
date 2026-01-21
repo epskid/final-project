@@ -120,13 +120,11 @@ void main() {
             break;
         case lava_source:
         case lava:
-            if (time % 60 == 0) {
-                flowTo(x0, y0 + 1); // straight down
-                flowTo(x0 + random, y0); // left/right
-                flowTo(x0 - random, y0); // opposite of above
-                flowTo(x0 + random, y0 + 1); // left/right + down
-                flowTo(x0 - random, y0 + 1); // opposite of above
-            }
+            flowTo(x0, y0 + 1); // straight down
+            flowTo(x0 + random, y0); // left/right
+            flowTo(x0 - random, y0); // opposite of above
+            flowTo(x0 + random, y0 + 1); // left/right + down
+            flowTo(x0 - random, y0 + 1); // opposite of above
             break;
         case shifty_sand:
             if (

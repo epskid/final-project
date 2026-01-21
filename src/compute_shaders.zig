@@ -155,7 +155,8 @@ pub fn RenderedComputeShader(
         }
 
         pub fn draw(self: *const Self) void {
-            const time: f32 = @floatCast(rl.getTime());
+            var time: f32 = @floatCast(rl.getTime());
+            time = @mod(time, 67);
             rl.setShaderValue(self.render, 1, &time, .float);
             rl.gl.rlBindShaderBuffer(self.compute.buffer_a, 1);
 

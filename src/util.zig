@@ -137,9 +137,6 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
 }
 
 pub fn toggleFullscreen() void {
-    rl.setWindowState(.{
-        .window_undecorated = !rl.isWindowFullscreen(),
-    });
     if (!rl.isWindowFullscreen()) {
         const mon = rl.getCurrentMonitor();
         const mon_w = rl.getMonitorWidth(mon);

@@ -31,6 +31,8 @@ pub fn draw(self: *Self) void {
     rect.y += 16;
     _ = rg.label(rect, "LEFT MOUSE - FIRE");
     rect.y += 16;
+    _ = rg.label(rect, "ESCAPE - PAUSE/SETTINGS");
+    rect.y += 16;
 
     if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK")) {
         self.should_return = true;

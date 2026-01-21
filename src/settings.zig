@@ -3,11 +3,13 @@ const Self = @This();
 
 previous_state: ?s.State,
 should_return: bool,
+return_to_menu: bool,
 
 pub fn init(previous_state: ?s.State) Self {
     return .{
         .previous_state = previous_state,
         .should_return = false,
+        .return_to_menu = false,
     };
 }
 
@@ -45,9 +47,9 @@ pub fn draw(self: *Self) void {
 
     util.drawText("SETTINGS", 16, 16, 24, .white);
     rect.y += 24 + 4;
-    
+
     {
-        if(util.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
+        if (util.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
 
         rect.y += 16 + 4;
     }
@@ -75,9 +77,16 @@ pub fn draw(self: *Self) void {
         rect.y += 16 + 4;
     }
 
-    if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK")) {
+    if (util.button(rect, "BACK")) {
         self.should_return = true;
     }
+
+    if (self.previous_state) |pv| switch (pv) {
+        .playing => if (util.button(.init(16, consts.height - 16 - 16, 256, 16), "BACK TO MENU (PROGRESS IS LOST!)")) {
+            self.return_to_menu = true;
+        },
+        else => {},
+    };
 }
 
 pub fn getNewState(self: *const Self) ?s.NewStateInfo {
@@ -90,6 +99,15 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
                 .deinit = true,
             };
         }
+    }
+
+    if (self.return_to_menu) {
+        return .{
+            .new_state = .{
+                .needs_init = .menu,
+            },
+            .deinit = true,
+        };
     }
 
     return null;
