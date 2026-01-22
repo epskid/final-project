@@ -48,11 +48,8 @@ pub fn draw(self: *Self) void {
     util.drawText("SETTINGS", 16, 16, 24, .white);
     rect.y += 24 + 4;
 
-    {
-        if (util.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
-
-        rect.y += 16 + 4;
-    }
+    if (util.button(rect, "TOGGLE FULLSCREEN")) util.toggleFullscreen();
+    rect.y += 16 + 4;
 
     toggler(&fractional_scaling, "FRACTIONAL SCALING", &rect);
     toggler(&post_malone, "POST PROCESSING", &rect);

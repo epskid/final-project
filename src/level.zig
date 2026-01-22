@@ -50,12 +50,12 @@ pub fn load(path: [:0]const u8, game: *Game) !Self {
             const map = try Map.load(map_path);
             if (map.artifact) |af| quota += af.rarity.toScore();
             // 0 defines the starting map
-            if (ch != '0') {
-                try maps.append(game.global_allocator, map);
-                try map_char_list.append(game.global_allocator, ch);
-            } else {
+            if (ch == '0') {
                 try maps.insert(game.global_allocator, 0, map);
                 try map_char_list.insert(game.global_allocator, 0, ch);
+            } else {
+                try maps.append(game.global_allocator, map);
+                try map_char_list.append(game.global_allocator, ch);
             }
         }
     }

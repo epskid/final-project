@@ -1,8 +1,8 @@
 Palette: Rosy-42 by PineTreePizza (https://twitter.com/PineTreePizza)
 Art: I (with self-compiled Aseprite)
-Music: Me (using LMMS)
-SFX: Various Sounds made with LMMS and Preset LMMS Sounds
 Font: Pixel Intv by Pixel Sagas (www.pixelsagas.com)
+Music: Me (using LMMS)
+SFX: Various Sounds made with LMMS Plugins and Preset LMMS Sounds
 Programming: Myself (and the Raylib project for examples)
 CRT Shader: libretro (crt-pi)
 Player: You (thanks for playing)

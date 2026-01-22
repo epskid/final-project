@@ -21,6 +21,8 @@ pub inline fn mkTileHitboxAt(pos: rl.Vector2) rl.Rectangle {
     );
 }
 
+// applies a thin "skin" around a hitbox
+// makes everything better
 pub inline fn skinHitbox(hitbox: rl.Rectangle) rl.Rectangle {
     return .init(
         hitbox.x + consts.skin_width,
@@ -43,6 +45,7 @@ pub const MoveAndCollideResult = struct {
     grounded: bool,
 };
 
+// physics implementation
 pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbox_with_skin: rl.Rectangle, map: *const Map) MoveAndCollideResult {
     // update position and velocity based on collisions and return some helpful data
 
@@ -88,12 +91,14 @@ pub inline fn moveAndCollide(position: *rl.Vector2, velocity: *rl.Vector2, hitbo
     };
 }
 
+// dunno why raylib doesn't have this
 pub inline fn texFromImg(file: [:0]const u8) !rl.Texture2D {
     const img = try rl.loadImage(file);
     defer rl.unloadImage(img);
     return try rl.loadTextureFromImage(img);
 }
 
+// a button that makes a sound
 pub inline fn button(bounds: rl.Rectangle, text: [:0]const u8) bool {
     const result = rg.button(bounds, text);
     if (result) {
@@ -103,14 +108,17 @@ pub inline fn button(bounds: rl.Rectangle, text: [:0]const u8) bool {
     return result;
 }
 
+// draw text in our font
 pub fn drawText(text: [:0]const u8, x: i32, y: i32, size: i32, color: rl.Color) void {
     rl.drawTextEx(assets.font, text, .init(asf32(x), asf32(y)), asf32(size), 1, color);
 }
 
+// measure text in our font
 pub fn measureText(text: [:0]const u8, size: i32) i32 {
     return @intFromFloat(rl.measureTextEx(assets.font, text, asf32(size), 1).x);
 }
 
+// lowpass filter for audio when in sand
 pub fn LowpassFilter(comptime frequency_hz: f32) type {
     return struct {
         var low = [_]f32{ 0.0, 0.0 };
@@ -136,6 +144,8 @@ pub fn LowpassFilter(comptime frequency_hz: f32) type {
     };
 }
 
+// toggle fullscreen
+// still a bit wierd on windows
 pub fn toggleFullscreen() void {
     if (!rl.isWindowFullscreen()) {
         const mon = rl.getCurrentMonitor();
@@ -146,6 +156,7 @@ pub fn toggleFullscreen() void {
     rl.toggleFullscreen();
 }
 
+// simple time formatting
 pub const FormattedTime = struct {
     seconds: usize,
 

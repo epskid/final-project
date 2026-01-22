@@ -28,9 +28,13 @@ layout(std430, binding = 2) buffer buffer_b_layout {
 
 layout(location = 0) uniform uint time;
 
+// mutex operations (based on atomics)
+// claims a cell if it is unclaimed, return its success
 #define claimIfAvailable(x, y) (atomicCompSwap(buffer_b[(x) + screen_width * (y)], 0, 1) == 0)
+// unclaims a cell
 #define unclaim(x, y) buffer_b[(x) + screen_width * (y)] = 0
 
+// get & set cells, no-ops if out of bounds
 #define get(x, y) (((x) >= screen_width) ? 0 : \
     (((x) < 0) ? 0 : \
      (((y) > screen_height) ? 0 : \
@@ -40,7 +44,11 @@ layout(location = 0) uniform uint time;
     && ((y) >= 0) && ((y) <= (screen_height - 1))) buffer_a[(x) + screen_width * (y)] = value
 
 // main update function for sand; can move into empty space or lava
-#define fallTo(x, y) if ((((get((x), (y)) & mask_type) == nothing) || ((get((x), (y)) & mask_type) == lava) || ((get((x), (y)) & mask_type) == lava_source)) && claimIfAvailable(x, y)) { \
+#define fallTo(x, y) if (( \
+    ((get((x), (y)) & mask_type) == nothing) \
+    || ((get((x), (y)) & mask_type) == lava) \
+    || ((get((x), (y)) & mask_type) == lava_source) \
+) && claimIfAvailable(x, y)) { \
     set(x0, y0, 0); \
     if ((get((x), (y)) & mask_type) == nothing) set((x), (y), current); \
     break; \
@@ -52,7 +60,7 @@ layout(location = 0) uniform uint time;
     set((x), (y), current); \
     break; \
 }
-// main update function for sand; can move into empty space or lava
+// main update function for lava; like sand, but can move to more places
 #define flowTo(x, y) if (( \
     ((get((x), (y)) & mask_type) != rock) \
     && ((get((x), (y)) & mask_type) != packed_sand) \
@@ -66,6 +74,8 @@ layout(location = 0) uniform uint time;
 }
 
 // "gold noise"
+// actually a pretty bad noise function
+// but it's the only one i found that took a seed
 const float phi = 1.61803398874989484820459;
 float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
@@ -136,5 +146,6 @@ void main() {
             break;
     }
 
+    // unclaim our old position
     unclaim(x0, y0);
 }

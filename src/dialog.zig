@@ -1,3 +1,6 @@
+// dialogue implementation
+// pretty one sided conversations
+
 const Self = @This();
 
 const Conversation = struct {

@@ -23,12 +23,12 @@ pub fn wrap(ptr: anytype) Self {
         }
 
         pub fn draw(self_: *const anyopaque) void {
-            const self: T = @ptrCast(@constCast(@alignCast(self_)));
+            const self: T = @ptrCast(@alignCast(@constCast(self_)));
             return ptr_info.pointer.child.draw(self);
         }
 
         pub fn shouldDespawn(self_: *const anyopaque) bool {
-            const self: T = @ptrCast(@constCast(@alignCast(self_)));
+            const self: T = @ptrCast(@alignCast(@constCast(self_)));
             return ptr_info.pointer.child.shouldDespawn(self);
         }
     };

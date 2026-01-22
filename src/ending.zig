@@ -16,6 +16,9 @@ pub fn tick(self: *Self) !void {
 }
 
 pub fn draw(self: *const Self) void {
+    // sorry for how this code looks
+    // layouting is not raylib's strong suit...
+
     rl.drawTexture(self.end_background, 0, 0, .white);
     util.drawText("THE XYLYL HERALD - NEWS FROM ACROSS THE UNIVERSE", 16, 16, 12, .gray);
     util.drawText("LOCAL BUSINESS MOGUL TAKEN TO COURT", 16, 16 + 12, 24, .black);

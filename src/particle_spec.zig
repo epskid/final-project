@@ -25,7 +25,7 @@ pub const Particle = struct {
         //   |---------------------------| |-||----|
         //          color information       |  type
         //                                direction
-        // 
+        //
         // color information is stored like an rgb color in hex format (0xFFFFFF is white, 0xFF0000 is red, etc.)
         // direction holds 8 possible directions the particle may want to go (top-left, top, etc.)
         // and type is the number corresponding to the ParticleType enum above

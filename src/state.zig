@@ -1,3 +1,5 @@
+// state management
+
 pub const NewStateInfo = struct {
     new_state: union(enum) {
         needs_init: std.meta.Tag(State),
@@ -13,7 +15,9 @@ pub const NewStateInfo = struct {
     }
 };
 
+// provides a layer for interfacing with all state types
 pub const State = union(enum) {
+    // state types
     splash: ?*Splash,
     menu: ?*Menu,
     controls: ?*Controls,
@@ -72,7 +76,7 @@ pub const State = union(enum) {
                 end.* = try .init();
                 return .{ .ending = end };
             },
-            else => unreachable
+            else => unreachable,
         }
     }
 
@@ -106,7 +110,7 @@ pub const State = union(enum) {
                 switch (new_state) {
                     .playing => |game| switch (self) {
                         .menu => |menu| try game.?.loadLevel(menu.?.selected_level.?),
-                        else => {}
+                        else => {},
                     },
                     inline .controls, .settings => |maybe| if (maybe) |confirmed| {
                         std.debug.assert(!should.deinit);

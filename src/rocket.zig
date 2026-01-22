@@ -49,7 +49,11 @@ pub fn tick(self: *Self, game: *Game) !void {
 pub fn draw(_: *const Self) void {}
 
 pub fn shouldDespawn(self: *const Self) bool {
-    return self.hit_wall or (self.position.y >= consts.height) or (self.position.y <= 0) or (self.position.x >= consts.width) or (self.position.x <= 0);
+    return self.hit_wall
+        or (self.position.y >= consts.height)
+        or (self.position.y <= 0)
+        or (self.position.x >= consts.width)
+        or (self.position.x <= 0);
 }
 
 pub fn ticker(self: *Self) Ticker {

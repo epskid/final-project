@@ -18,14 +18,19 @@ fn isBreakable(tile: ps.ParticleType) bool {
 }
 
 tiles: [consts.width_tiles * consts.height_tiles]ps.ParticleType,
-artifact: ?Artifact = null,
-particles: ?[]ps.Particle.GLSLRepr = null,
-tractor_beam: ?TractorBeam = null,
+artifact: ?Artifact,
+// for extra coolness this could be compressed in memory when unloaded
+// probably with run-length encoding
+particles: ?[]ps.Particle.GLSLRepr,
+tractor_beam: ?TractorBeam,
 
 pub fn load(path: [:0]const u8) !Self {
     // load a map
     var self: Self = .{
         .tiles = undefined,
+        .artifact = null,
+        .particles = null,
+        .tractor_beam = null,
     };
     @memset(&self.tiles, .none);
 
@@ -151,6 +156,7 @@ pub fn spawn(self: *Self, game: *Game) void {
     game.simulation.compute.writeCommands();
 }
 
+// use the current particle data to set tiles accurately
 pub fn loadTiles(self: *Self, game: *const Game) void {
     @setRuntimeSafety(false);
 
@@ -178,6 +184,7 @@ pub fn loadTiles(self: *Self, game: *const Game) void {
 
 pub fn saveParticles(self: *Self, game: *Game) void {
     // save the particles if we have the memory for it
+    // on lower-end systems, users will just see tiles
     const particles = game.global_allocator.alloc(ps.Particle.GLSLRepr, consts.width * consts.height) catch |err| {
         std.log.warn("wasn't able to save simulation state: {}", .{err});
         return;

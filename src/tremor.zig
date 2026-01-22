@@ -1,3 +1,5 @@
+// a screen shaker
+
 const Self = @This();
 
 size: f32,

@@ -53,6 +53,9 @@ pub fn unload() void {
     rl.unloadTexture(artifacts);
     rl.unloadImage(tileset);
 
+    rl.unloadTexture(outside);
+    rl.unloadTexture(inside);
+
     rl.unloadSound(ui_sound);
     rl.unloadSound(volume_sound);
     rl.unloadSound(shoot_sound);

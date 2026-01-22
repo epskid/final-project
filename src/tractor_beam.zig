@@ -47,7 +47,7 @@ pub fn draw(self: *const Self) void {
             .init(self.bottom.x, -ring_offset + (ring_num * ring_distance) + ring_distance),
             width * (((ring_num + 1) - (ring_offset / ring_distance)) / 8),
             8,
-            consts.palette.x92E8C0
+            consts.palette.x92E8C0,
         );
     }
 

@@ -32,6 +32,7 @@ float rand(vec2 xy, float seed) {
     return fract(tan(distance(xy * phi, xy) * seed) * xy.x);
 }
 
+// see https://github.com/Apfelstrudel-Technologien/raylibVignette/blob/main/vignette.fs
 vec4 vignette(vec4 color) {
     return mix(
         color,
@@ -72,6 +73,5 @@ void main()
         finalColor = vec4(rgb, 1);
     }
 
-    // https://github.com/Apfelstrudel-Technologien/raylibVignette
     finalColor = vignette(finalColor);
 }

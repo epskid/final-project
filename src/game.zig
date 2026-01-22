@@ -207,7 +207,7 @@ pub fn freeLocal(self: *Self) void {
 }
 
 pub fn deinit(self: *Self, _: std.mem.Allocator) void {
-    self.freeLocal();
+    self.freeLocal(); // clear any leftover local data
     self.level.unload(self);
     self.simulation.unload();
     self.global_allocator.free(self.particles);

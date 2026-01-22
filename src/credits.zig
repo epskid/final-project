@@ -1,3 +1,5 @@
+// credits screen
+
 const Self = @This();
 
 const credits = @embedFile("credits.txt");

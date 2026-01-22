@@ -10,29 +10,36 @@ const suffocation_time = 3; // (seconds) time to suffocate
 const sand_speed = 0.4; // sand speed multiplier
 const tractor_beam_speed = 0.7; // tractor beam speed multiplier
 
-suffocating: bool = false,
-suffocation: ?f32 = null,
+suffocating: bool,
+suffocation: ?f32,
 position: rl.Vector2,
 velocity: rl.Vector2,
 gun_position: rl.Vector2,
-gun_cooldown: f32 = 0,
+gun_cooldown: f32,
 grounded: bool,
-artifact: ?Artifact = null, // the artifact we're carrying
-exploding: ?usize = null,
-died: bool = false,
+artifact: ?Artifact,
+exploding: ?usize,
+died: bool,
 
 pub fn init() Self {
     rl.stopMusicStream(assets.main_music);
     rl.updateMusicStream(assets.main_music);
     return .{
+        .suffocating = false,
+        .suffocation = null,
         .position = .zero(),
         .velocity = .zero(),
         .gun_position = .zero(),
+        .gun_cooldown = 0,
         .grounded = false,
+        .artifact = null,
+        .exploding = null,
+        .died = false,
     };
 }
 
 pub fn getHitbox(self: *const Self) rl.Rectangle {
+    // hitbox expands when holding an artifact
     return .init(
         0,
         if (self.artifact != null) -consts.tile_size else 0,
@@ -41,6 +48,7 @@ pub fn getHitbox(self: *const Self) rl.Rectangle {
     );
 }
 
+// 500Hz lowpass filter when suffocating
 const SuffocatingFilter = util.LowpassFilter(500);
 
 pub fn tick(self: *Self, game: *Game) !void {
@@ -65,6 +73,7 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
     rl.updateMusicStream(assets.main_music);
     if (was_playing and !rl.isMusicStreamPlaying(assets.main_music)) {
+        // explode when the music stops
         self.exploding = 60;
         const exp = try game.cloneLocal(Explosion, .init(self.position.addValue(consts.tile_size / 2), 60, false));
         try game.spawn(exp.ticker());
@@ -120,6 +129,8 @@ pub fn tick(self: *Self, game: *Game) !void {
     }
 
     // particle collisions
+    // can probably made more efficient but this implementation keeps up 60fps on debug mode
+    // if it ain't broke don't fix it
     const prev_suffoc = self.suffocating;
     {
         var sand_count: u32 = 0;
@@ -163,7 +174,7 @@ pub fn tick(self: *Self, game: *Game) !void {
         }
     }
 
-    // add filters
+    // add audio filters
     if (!prev_suffoc and self.suffocating) {
         rl.attachAudioStreamProcessor(assets.main_music.stream, SuffocatingFilter.process);
     } else if (!self.suffocating) {
@@ -210,7 +221,7 @@ pub fn tick(self: *Self, game: *Game) !void {
             }
         }
         if (self.position.y < min.y or self.position.y > max.y) {
-            self.velocity.y = -self.velocity.y;
+            self.velocity.y = -self.velocity.y * 0.1;
             while (self.position.y < min.y or self.position.y > max.y) {
                 _ = util.moveAndCollide(
                     &self.position,

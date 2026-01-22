@@ -1,6 +1,15 @@
 #version 430
 
-// CRT shader from libretro: https://github.com/libretro/glsl-shaders/blob/master/crt/shaders/crt-pi.glsl
+in vec2 fragTexCoord;
+in vec4 fragColor;
+
+uniform sampler2D texture0;
+uniform vec4 colDiffuse;
+
+out vec4 finalColor;
+
+// CRT shader from libretro (tweaked a bit though): https://github.com/libretro/glsl-shaders/blob/master/crt/shaders/crt-pi.glsl
+// BEGIN CRT SHADER
 #define SHARPER
 #define SCANLINES
 #define MASK_TYPE 1
@@ -13,15 +22,7 @@
 #define INPUT_GAMMA 2.4
 #define OUTPUT_GAMMA 2.2
 
-in vec2 fragTexCoord;
-in vec4 fragColor;
-
-uniform sampler2D texture0;
-uniform vec4 colDiffuse;
-
 layout (location = 67) uniform vec2 TextureSize;
-
-out vec4 finalColor;
 
 float CalcScanLineWeight(float dist)
 {
@@ -119,6 +120,7 @@ void crtMain()
 #endif
 	}
 }
+// END CRT SHADER
 
 void main()
 {
