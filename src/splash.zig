@@ -3,12 +3,15 @@ const Self = @This();
 
 const total_time = 3;
 
+boot: rl.Sound,
 splash: rl.Texture,
 progress: f32,
 
 pub fn init() !Self {
+    const boot = try rl.loadSound("resources/sounds/sfx/boot.ogg");
+    rl.playSound(boot);
     return .{
-        // load beautiful image
+        .boot = boot,
         .splash = try util.texFromImg("resources/images/splash.png"),
         .progress = 0,
     };
@@ -37,6 +40,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
 }
 
 pub fn deinit(self: *Self, _: std.mem.Allocator) void {
+    rl.unloadSound(self.boot);
     rl.unloadTexture(self.splash);
 }
 
