@@ -57,8 +57,10 @@ pub fn drawLevelSelect(self: *Self) void {
         rect.y += 16 + 4;
     }
 
-    if ((unlocked >= levels.len) and util.button(rect, "CLOSING")) {
-        self.next_state = .ending;
+    if (unlocked >= levels.len) {
+        if (util.button(rect, "CLOSING")) {
+            self.next_state = .ending;
+        }
         rect.y += 16 + 4;
     }
 

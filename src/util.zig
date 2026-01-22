@@ -146,6 +146,25 @@ pub fn toggleFullscreen() void {
     rl.toggleFullscreen();
 }
 
+pub const FormattedTime = struct {
+    seconds: usize,
+
+    pub fn format(
+        self: FormattedTime,
+        writer: *std.io.Writer,
+    ) !void {
+        const time_minutes = @divFloor(self.seconds, 60);
+        const time_seconds = self.seconds % 60;
+        try writer.print("{}:{:0>2}", .{ time_minutes, time_seconds });
+    }
+};
+
+pub fn formatTime(seconds: usize) FormattedTime {
+    return .{
+        .seconds = seconds,
+    };
+}
+
 const Map = @import("map.zig");
 const Settings = @import("settings.zig");
 
@@ -154,3 +173,4 @@ const assets = @import("assets.zig");
 
 const rl = @import("raylib");
 const rg = @import("raygui");
+const std = @import("std");

@@ -3,6 +3,7 @@ const Self = @This();
 tip_string: [:0]const u8,
 score_quota_string: [:0]u8,
 grade_string: [:0]u8,
+time_string: [:0]u8,
 deaths_string: [:0]u8,
 send_back: bool,
 
@@ -21,6 +22,7 @@ pub fn init(
     index: usize,
     score: usize,
     quota: usize,
+    time: usize,
     deaths: usize,
 ) !Self {
     const grade = getGrade(score, quota);
@@ -30,6 +32,7 @@ pub fn init(
         .tip_string = if (grade == 'F') "GET A NON 'F' GRADE TO UNLOCK THE NEXT LEVEL" else "THE NEXT LEVEL IS AVAILABLE",
         .score_quota_string = try std.fmt.allocPrintSentinel(allocator, "SCORE/QUOTA: {}/{}", .{ score, quota }, 0),
         .grade_string = try std.fmt.allocPrintSentinel(allocator, "LETTER GRADE: {c}", .{grade}, 0),
+        .time_string = try std.fmt.allocPrintSentinel(allocator, "TOTAL TIME: {f}", .{util.formatTime(time)}, 0),
         .deaths_string = try std.fmt.allocPrintSentinel(allocator, "USED: {}", .{deaths + 1}, 0),
         .send_back = false,
     };
@@ -49,6 +52,7 @@ pub fn draw(self: *Self) void {
     const sq_width = util.measureText(self.score_quota_string, font_size);
     const g_width = util.measureText(self.grade_string, font_size);
     const t_width = util.measureText(self.tip_string, font_size / 2);
+    const tm_width = util.measureText(self.time_string, font_size);
     const d_width = util.measureText(self.deaths_string, font_size);
 
     util.drawText(
@@ -73,9 +77,16 @@ pub fn draw(self: *Self) void {
         .gray,
     );
     util.drawText(
+        self.time_string,
+        consts.width / 2 - @divFloor(tm_width, 2),
+        consts.height / 2 + (3 * font_size) / 2,
+        font_size,
+        .white,
+    );
+    util.drawText(
         self.deaths_string,
         consts.width / 2 - @divFloor(d_width, 2),
-        consts.height / 2 + (3 * font_size) / 2,
+        consts.height / 2 + (5 * font_size) / 2,
         font_size,
         .white,
     );
@@ -101,6 +112,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
 pub fn deinit(self: *Self, allocator: std.mem.Allocator) void {
     allocator.free(self.score_quota_string);
     allocator.free(self.grade_string);
+    allocator.free(self.time_string);
     allocator.free(self.deaths_string);
 }
 

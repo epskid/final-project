@@ -18,6 +18,7 @@ particles: []ps.Particle.GLSLRepr,
 hash_after: [consts.height_tiles]u32,
 score: usize,
 deaths: usize,
+time: f32,
 
 pub fn init(allocator: std.mem.Allocator) !Self {
     // load the particle simulation
@@ -45,6 +46,7 @@ pub fn init(allocator: std.mem.Allocator) !Self {
         .hash_after = undefined,
         .score = 0,
         .deaths = 0,
+        .time = 0,
     };
 }
 
@@ -103,6 +105,8 @@ pub fn tick(self: *Self) !void {
         self.simulation.compute.readA(self.particles);
 
         self.map.loadTiles(self);
+
+        self.time += rl.getFrameTime();
     }
 
     try self.player.tick(self);
@@ -132,10 +136,13 @@ pub fn draw(self: *const Self) void {
     util.drawText(score_str, 32, 32, 24, .white);
 
     if (Settings.show_timer) {
-        const time_remaining: u32 = @intFromFloat(rl.getMusicTimeLength(assets.main_music) - rl.getMusicTimePlayed(assets.main_music));
-        const time_minutes = @divFloor(time_remaining, 60);
-        const time_seconds = time_remaining % 60;
-        const timer_str = std.fmt.allocPrintSentinel(self.global_allocator, "TIME: {}:{:0>2}", .{time_minutes, time_seconds}, 0) catch unreachable;
+        const time_remaining: usize = @intFromFloat(rl.getMusicTimeLength(assets.main_music) - rl.getMusicTimePlayed(assets.main_music));
+        const timer_str = std.fmt.allocPrintSentinel(
+            self.global_allocator,
+            "TIME: {f}",
+            .{util.formatTime(time_remaining)},
+            0,
+        ) catch unreachable;
         defer self.global_allocator.free(timer_str);
         util.drawText(timer_str, 32, 32 + 24, 24, .white);
     }
@@ -162,6 +169,7 @@ pub fn getNewState(self: *const Self) ?s.NewStateInfo {
                     self.index,
                     self.score,
                     self.level.quota,
+                    @intFromFloat(self.time),
                     self.deaths,
                 ) catch |e| break :blk e;
                 const stats_dupe = self.global_allocator.create(Stats) catch |e| break :blk e;
