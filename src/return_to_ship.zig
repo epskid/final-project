@@ -37,7 +37,7 @@ pub fn draw(self: *const Self) void {
         consts.height / 2 - size / 2 - pad,
         consts.width,
         size + 2 * pad,
-        .init(67, 67, 67, 101),
+        .init(67, 67, 67, 127),
     );
     util.drawText(
         return_to_ship,
